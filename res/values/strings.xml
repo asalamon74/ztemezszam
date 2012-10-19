@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ZTE Mezszám</string>
+    <string name="titlePrefs">Beállítások</string>
+    <string name="titleStartSync">Szinkronizálás induláskor</string>
+    <string name="summaryStartSync">Mezszámfrissítés letöltése a program indításakor</string>
 </resources>
