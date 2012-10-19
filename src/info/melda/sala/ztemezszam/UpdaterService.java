@@ -98,6 +98,7 @@ public class UpdaterService extends Service {
             try {
                 BufferedReader r = readURL("seasons.csv");
                 String line;
+                db.beginTransaction();
                 db.execSQL("delete from season");
                 while ((line = r.readLine()) != null) {
                     //Log.d( TAG, "seasonline: "+line);
@@ -144,6 +145,8 @@ public class UpdaterService extends Service {
                         }
                     }
                 }
+                db.setTransactionSuccessful();
+                db.endTransaction();
 
                 intent = new Intent( DB_UPDATED_INTENT);
                 updaterService.sendBroadcast(intent);
