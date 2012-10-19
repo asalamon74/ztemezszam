@@ -6,14 +6,12 @@
   <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="10dp"
     android:textColor="#fff" android:textSize="30sp"
     android:id="@+id/titleSeason"
     android:background="#ff0000"/>
 
   <ListView android:layout_height="fill_parent"
     android:layout_width="fill_parent" 
-    android:id="@+id/listSeason"
-    android:background="#00ff00" />
+    android:id="@+id/listSeason" />
 
 </LinearLayout>

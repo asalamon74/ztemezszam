@@ -9,11 +9,11 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.StringTokenizer;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,6 +28,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class UpdaterService extends Service {
 
     private static final String TAG = "UpdaterService";
+    public static final String DB_UPDATED_INTENT = "info.melda.sala.DB_UPDATED";
     private Updater updater;
     private ZTEMezszamApplication application;
     
@@ -70,7 +71,7 @@ public class UpdaterService extends Service {
 
         private DbHelper dbHelper;
         private SQLiteDatabase db;
-
+        private Intent intent;
 
         public Updater() {
             super("UpdaterService-Updater");
@@ -99,7 +100,7 @@ public class UpdaterService extends Service {
                 String line;
                 db.execSQL("delete from season");
                 while ((line = r.readLine()) != null) {
-                    Log.d( TAG, "seasonline: "+line);
+                    //Log.d( TAG, "seasonline: "+line);
                     StringTokenizer st = new StringTokenizer( line, "," );
                     Object[] season = new Object[2];
                     season[0] = st.nextToken();
@@ -109,9 +110,9 @@ public class UpdaterService extends Service {
                 r = readURL("players.csv");
                 db.execSQL("delete from player");
                 while ((line = r.readLine()) != null) {
-                    Log.d( TAG, "playerline: "+line);
+                    //Log.d( TAG, "playerline: "+line);
                     StringTokenizer st = new StringTokenizer( line, "," );
-                    Log.d( TAG, "tokennum: "+st.countTokens());
+                    //Log.d( TAG, "tokennum: "+st.countTokens());
                     Object[] player = new Object[2];
                     player[0] = st.nextToken();
                     player[1] = st.nextToken();
@@ -120,16 +121,16 @@ public class UpdaterService extends Service {
                 r = readURL("shirts.csv");
                 db.execSQL("delete from shirt");
                 while ((line = r.readLine()) != null) {
-                    Log.d( TAG, "shirtline: "+line);
+                    //Log.d( TAG, "shirtline: "+line);
                     StringTokenizer st = new StringTokenizer( line, "," );
-                    Log.d( TAG, "tokennum: "+st.countTokens());
+                    //Log.d( TAG, "tokennum: "+st.countTokens());
                     String[] shirt = new String[3];
                     shirt[0] = st.nextToken();
                     shirt[1] = st.nextToken();
                     shirt[2] = st.nextToken();
                     int pos = shirt[1].indexOf("-");
                     if( pos == -1 ) {
-                        Log.d( TAG, "single shirt insert");
+                        //Log.d( TAG, "single shirt insert");
                         db.execSQL("insert into shirt (player_id, season_id, shirt_number) values (?,?,?)", shirt);
                     } else {
                         int seasonIdFrom = Integer.parseInt(shirt[1].substring(0, pos));
@@ -137,12 +138,15 @@ public class UpdaterService extends Service {
                         int seasonId = seasonIdFrom;
                         while( seasonId <= seasonIdTo ) {
                             shirt[1] = ""+seasonId;
-                            Log.d( TAG, "multi shirt insert");
+                            //Log.d( TAG, "multi shirt insert");
                             db.execSQL("insert into shirt (player_id, season_id, shirt_number) values (?,?,?)", shirt);
                             ++seasonId;
                         }
                     }
                 }
+
+                intent = new Intent( DB_UPDATED_INTENT);
+                updaterService.sendBroadcast(intent);
 
             } catch( IOException e) {
                 Log.d(TAG, "IOException" + e);

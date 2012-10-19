@@ -31,14 +31,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d( TAG, "onCreate" );
         db.execSQL("create table season ( season_id int primary key, season_name text )");
-        db.execSQL("insert into season ( season_id, season_name) values ( '64', '2012/13 ősz' )");
         db.execSQL("create table player ( player_id int primary key, player_name text )");
-        db.execSQL("insert into player ( player_id, player_name) values ( '2', 'Kocsárdi Gergely' )");
-        db.execSQL("insert into player ( player_id, player_name) values ( '85', 'Vlaszák Géza' )");
         db.execSQL("create table shirt ( shirt_id int primary key, player_id int, season_id int, shirt_number int )");
-        db.execSQL("insert into shirt ( shirt_id, player_id, season_id, shirt_number) values ( 1, 2, 64, 2)");
-        db.execSQL("insert into shirt ( shirt_id, player_id, season_id, shirt_number) values ( 2, 85, 64, 1)");
-        //db.execSQL("create table player ( player_id int primary key, player_name text )");
     }
 
     @Override
