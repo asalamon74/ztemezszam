@@ -17,8 +17,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +62,22 @@ public class SeasonActivity extends Activity {
         return db.rawQuery("select shirt_id _id, * from shirt, player where shirt.player_id=player.player_id and season_id="+seasonId+" order by shirt_number", null);
     }
 
+    private static final ViewBinder VIEW_BINDER = new ViewBinder() {
+
+        public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+            if (view.getId() != R.id.textId+123) {
+                return false;
+            }
+
+            String text = cursor.getString(columnIndex);
+            if( text.length() == 1 ) {
+                text = "\u0020"+text;
+            }
+            ((TextView) view).setText(text);
+            return true;
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -73,6 +91,7 @@ public class SeasonActivity extends Activity {
         titleSeason = (TextView) findViewById(R.id.titleSeason);
         titleSeason.setText(seasonName);
         adapter = new SimpleCursorAdapter(this, R.layout.season_row, getCursor(), FROM, TO);
+        adapter.setViewBinder(VIEW_BINDER); 
         listSeason.setAdapter(adapter);
         registerReceiver(receiver, filter );
     }

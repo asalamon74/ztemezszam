@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:textColor="#fff" android:textSize="30sp"
-    android:id="@+id/titleSeason"
-    android:background="#ff0000"/>
+    android:id="@+id/titleSeason"/>
 
   <ListView android:layout_height="fill_parent"
     android:layout_width="fill_parent" 
