@@ -4,5 +4,9 @@
     android:title="@string/titlePrefs"
     android:icon="@android:drawable/ic_menu_preferences">
     </item>
+  <item android:title="@string/titleManualSync"
+    android:id="@+id/itemManualSync"
+    android:icon="@android:drawable/ic_popup_sync">
+    </item>
 </menu>
 

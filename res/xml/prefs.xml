@@ -3,5 +3,5 @@
     <CheckBoxPreference
         android:title="@string/titleStartSync"
         android:summary="@string/summaryStartSync"
-        android:key="username" />
+        android:key="startsync" />
 </PreferenceScreen>

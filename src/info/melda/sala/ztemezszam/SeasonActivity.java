@@ -85,6 +85,9 @@ public class SeasonActivity extends Activity {
             case R.id.itemPrefs:
                 startActivity(new Intent(this, PrefsActivity.class));
                 break;
+            case R.id.itemManualSync:
+                startService(new Intent(this, UpdaterService.class));
+                break;
             }
         return true;
     }
