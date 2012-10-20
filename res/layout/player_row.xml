@@ -4,17 +4,16 @@
   android:layout_height="wrap_content" android:orientation="horizontal"
   android:layout_width="fill_parent">
     <TextView android:layout_height="fill_parent"
-      android:layout_width="30sp"
-      android:layout_weight="0"
-      android:id="@+id/seasonRowShirtNumber"
-      android:textStyle="bold"
-      android:paddingRight="12sp"
-      android:gravity="right"
-      android:textSize="12sp"/>
-    <TextView android:layout_height="fill_parent"
       android:layout_width="wrap_content"
       android:layout_weight="1"
+      android:id="@+id/playerRowSeasonName"
+      android:textStyle="bold"
+      android:paddingRight="12sp"
+      android:gravity="left"/>
+    <TextView android:layout_height="fill_parent"
+      android:layout_width="30sp"
+      android:layout_weight="0"
       android:gravity="left"
-      android:id="@+id/seasonRowPlayerName" />
+      android:id="@+id/playerRowShirtNumber" />
 
 </LinearLayout>

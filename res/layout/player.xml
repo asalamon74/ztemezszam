@@ -8,10 +8,10 @@
     android:layout_gravity="center"
     android:textColor="#fff"
     android:textSize="30sp"
-    android:id="@+id/titleSeason"/>
+    android:id="@+id/titlePlayer"/>
 
   <ListView android:layout_height="fill_parent"
     android:layout_width="fill_parent" 
-    android:id="@+id/listSeason" />
+    android:id="@+id/listPlayer" />
 
 </LinearLayout>

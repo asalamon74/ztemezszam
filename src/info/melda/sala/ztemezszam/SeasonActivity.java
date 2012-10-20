@@ -5,13 +5,10 @@
 
 package info.melda.sala.ztemezszam;
 
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 
 /**
@@ -21,10 +18,9 @@ import android.widget.TextView;
 public class SeasonActivity extends BaseActivity {
 
     private static final String TAG = "SeasonActivity";
-    private ListView listSeason;
     private TextView titleSeason;
     private static final String[] FROM = { "shirt_number", "player_name" };
-    private static final int[] TO = { R.id.textId, R.id.textName };
+    private static final int[] TO = { R.id.seasonRowShirtNumber, R.id.seasonRowPlayerName };
     private int seasonId=64;
     
     /** Called when the activity is first created. */
@@ -33,28 +29,12 @@ public class SeasonActivity extends BaseActivity {
         super.onCreate(icicle);
         setContentView(R.layout.season);
 
-        listSeason = (ListView) findViewById(R.id.listSeason); 
+        list = (ListView) findViewById(R.id.listSeason); 
     }
 
     protected Cursor getCursor() {
         return db.rawQuery("select shirt_id _id, * from shirt, player where shirt.player_id=player.player_id and season_id="+seasonId+" order by shirt_number", null);
     }
-
-    private static final ViewBinder VIEW_BINDER = new ViewBinder() {
-
-        public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-            if (view.getId() != R.id.textId) {
-                return false;
-            }
-
-            String text = cursor.getString(columnIndex);
-            if( text.length() == 1 ) {
-                text = "\u0020"+text;
-            }
-            ((TextView) view).setText(text);
-            return true;
-        }
-    };
 
     @Override
     protected void onResume() {
@@ -70,7 +50,7 @@ public class SeasonActivity extends BaseActivity {
         titleSeason.setText(seasonName);
         adapter = new SimpleCursorAdapter(this, R.layout.season_row, getCursor(), FROM, TO);
         //adapter.setViewBinder(VIEW_BINDER);
-        listSeason.setAdapter(adapter);
+        list.setAdapter(adapter);
     }
 
 }

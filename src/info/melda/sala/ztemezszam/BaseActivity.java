@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public abstract class BaseActivity extends Activity {
     private UpdateReceiver receiver;
     private IntentFilter filter;
     protected SimpleCursorAdapter adapter;
+    protected ListView list;
 
     @Override
     public void onCreate(Bundle icicle) {
