@@ -7,6 +7,7 @@ package info.melda.sala.ztemezszam;
 import android.app.Service;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import java.io.BufferedReader;
@@ -40,17 +41,14 @@ public class UpdaterService extends Service {
     public void onCreate() {
         super.onCreate();
         this.application = (ZTEMezszamApplication) getApplication();
-        this.updater = new Updater();
         Log.d(TAG, "onCreated");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-
-        if( !this.updater.isAlive() ) {
-            this.updater.start();
-        }
+        this.updater = new Updater();
+        this.updater.execute();
         Log.d(TAG, "onStarted");
         return START_STICKY;
     }
@@ -59,7 +57,7 @@ public class UpdaterService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        this.updater.interrupt();
+        this.updater.cancel(false);
         this.updater = null;
         Log.d(TAG, "onDestroyed");
     }
@@ -67,17 +65,11 @@ public class UpdaterService extends Service {
     /**
      * Thread that performs the actual update from the online service
      */
-    private class Updater extends Thread {
+    private class Updater extends AsyncTask<String,String,String> {
 
         private DbHelper dbHelper;
         private SQLiteDatabase db;
         private Intent intent;
-
-        public Updater() {
-            super("UpdaterService-Updater");
-            dbHelper = new DbHelper(UpdaterService.this);
-            db = dbHelper.getWritableDatabase();
-        }
 
         BufferedReader readURL(String fileName) throws IOException {
             DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -91,9 +83,7 @@ public class UpdaterService extends Service {
             return new BufferedReader(new InputStreamReader(is));
         }
 
-        @Override
-        public void run() {
-            UpdaterService updaterService = UpdaterService.this;
+        protected String doInBackground(String... params) {
             Log.d(TAG, "Updater running");
             try {
                 BufferedReader r = readURL("seasons.csv");
@@ -148,14 +138,20 @@ public class UpdaterService extends Service {
                 db.setTransactionSuccessful();
                 db.endTransaction();
 
-                intent = new Intent( DB_UPDATED_INTENT);
-                updaterService.sendBroadcast(intent);
 //                Thread.sleep(Long.MAX_VALUE);
             } catch( Exception e) {
                 Log.d(TAG, "Exception" + e);
             }
-
             Log.d(TAG, "Updater ran");
+            return null;
+        }
+
+        // Called once the background activity has completed
+        @Override
+        protected void onPostExecute(String result) {
+            UpdaterService updaterService = UpdaterService.this;
+            intent = new Intent( DB_UPDATED_INTENT);
+            updaterService.sendBroadcast(intent);
         }
     }
 }
