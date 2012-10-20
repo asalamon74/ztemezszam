@@ -67,9 +67,15 @@ public class UpdaterService extends Service {
      */
     private class Updater extends AsyncTask<String,String,String> {
 
+        static final String RECEIVE_ZTEDB_NOTIFICATION = "info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION";
         private DbHelper dbHelper;
         private SQLiteDatabase db;
         private Intent intent;
+
+        Updater() {
+            dbHelper = new DbHelper(UpdaterService.this);
+            db = dbHelper.getWritableDatabase();
+        }
 
         BufferedReader readURL(String fileName) throws IOException {
             DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -151,7 +157,7 @@ public class UpdaterService extends Service {
         protected void onPostExecute(String result) {
             UpdaterService updaterService = UpdaterService.this;
             intent = new Intent( DB_UPDATED_INTENT);
-            updaterService.sendBroadcast(intent);
+            updaterService.sendBroadcast(intent, RECEIVE_ZTEDB_NOTIFICATION);
         }
     }
 }

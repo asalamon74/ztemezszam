@@ -22,11 +22,8 @@ public class SeasonActivity extends BaseActivity {
     private static final int[] TO = { R.id.seasonRowShirtNumber, R.id.seasonRowPlayerName };
     private int seasonId=64;
     
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        setContentView(R.layout.season);
+    protected int getLayoutId() {
+        return R.layout.season;
     }
 
     protected int getListId() {

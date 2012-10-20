@@ -26,19 +26,26 @@ import android.widget.Toast;
  * @author salamon
  */
 public abstract class BaseActivity extends Activity {
+    private static final String TAG = "BaseActivity";
     private DbHelper dbHelper;
     protected SQLiteDatabase db;
     private UpdateReceiver receiver;
     private IntentFilter filter;
     protected SimpleCursorAdapter adapter;
     protected ListView list;
+    private static final String SEND_ZTEDB_NOTIFICATION = "info.melda.sala.SEND_ZTEDB_UPDATED_NOTIFICATION";
 
+    protected abstract int getLayoutId();
     protected abstract int getListId();
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        list = (ListView) findViewById(R.id.listSeason);
+        setContentView(getLayoutId());
+        Log.d( TAG, "onCreate");
+        Log.d( TAG, "id:"+getListId());
+        list = (ListView) findViewById( getListId() );
+        Log.d( TAG, "list:"+list);
         // Connect to database
         dbHelper = new DbHelper(this);
         db = dbHelper.getReadableDatabase();
@@ -55,7 +62,7 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(receiver, filter );
+        registerReceiver(receiver, filter, SEND_ZTEDB_NOTIFICATION, null );
     }
 
 
