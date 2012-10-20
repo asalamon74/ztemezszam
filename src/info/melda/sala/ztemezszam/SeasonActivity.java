@@ -7,7 +7,6 @@ package info.melda.sala.ztemezszam;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -28,8 +27,10 @@ public class SeasonActivity extends BaseActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.season);
+    }
 
-        list = (ListView) findViewById(R.id.listSeason); 
+    protected int getListId() {
+        return R.id.listSeason;
     }
 
     protected Cursor getCursor() {
@@ -49,7 +50,6 @@ public class SeasonActivity extends BaseActivity {
         titleSeason = (TextView) findViewById(R.id.titleSeason);
         titleSeason.setText(seasonName);
         adapter = new SimpleCursorAdapter(this, R.layout.season_row, getCursor(), FROM, TO);
-        //adapter.setViewBinder(VIEW_BINDER);
         list.setAdapter(adapter);
     }
 

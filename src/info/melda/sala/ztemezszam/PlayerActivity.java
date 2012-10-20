@@ -7,7 +7,6 @@ package info.melda.sala.ztemezszam;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -28,8 +27,10 @@ public class PlayerActivity extends BaseActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.player);
+    }
 
-        list = (ListView) findViewById(R.id.listPlayer);
+    protected int getListId() {
+        return R.id.listPlayer;
     }
 
     protected Cursor getCursor() {

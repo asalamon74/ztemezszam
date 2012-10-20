@@ -33,9 +33,12 @@ public abstract class BaseActivity extends Activity {
     protected SimpleCursorAdapter adapter;
     protected ListView list;
 
+    protected abstract int getListId();
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        list = (ListView) findViewById(R.id.listSeason);
         // Connect to database
         dbHelper = new DbHelper(this);
         db = dbHelper.getReadableDatabase();
