@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,10 +48,11 @@ public class UpdaterService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        this.updater.start();
-
+        if( !this.updater.isAlive() ) {
+            this.updater.start();
+        }
         Log.d(TAG, "onStarted");
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class UpdaterService extends Service {
                     player[0] = st.nextToken();
                     player[1] = st.nextToken();
                     db.execSQL("insert into player (player_id, player_name) values (?, ?)", player);
-                    }
+                }
                 r = readURL("shirts.csv");
                 db.execSQL("delete from shirt");
                 while ((line = r.readLine()) != null) {
@@ -150,9 +150,9 @@ public class UpdaterService extends Service {
 
                 intent = new Intent( DB_UPDATED_INTENT);
                 updaterService.sendBroadcast(intent);
-
-            } catch( IOException e) {
-                Log.d(TAG, "IOException" + e);
+//                Thread.sleep(Long.MAX_VALUE);
+            } catch( Exception e) {
+                Log.d(TAG, "Exception" + e);
             }
 
             Log.d(TAG, "Updater ran");
