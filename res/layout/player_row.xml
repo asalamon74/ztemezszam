@@ -9,11 +9,13 @@
       android:id="@+id/playerRowSeasonName"
       android:textStyle="bold"
       android:paddingRight="12sp"
-      android:gravity="left"/>
+      android:gravity="left"
+      android:textSize="20sp"/>
     <TextView android:layout_height="fill_parent"
-      android:layout_width="30sp"
+      android:layout_width="40sp"
       android:layout_weight="0"
       android:gravity="left"
+      android:textSize="20sp"
       android:id="@+id/playerRowShirtNumber" />
 
 </LinearLayout>

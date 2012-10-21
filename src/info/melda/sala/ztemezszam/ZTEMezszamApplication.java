@@ -17,8 +17,7 @@ import android.util.Log;
 public class ZTEMezszamApplication extends Application {
     private static final String TAG = ZTEMezszamApplication.class.getSimpleName();
     private SharedPreferences prefs;
-    private boolean serviceRunning;
-
+    
     @Override
     public void onCreate() {
         super.onCreate();

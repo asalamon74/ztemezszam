@@ -5,8 +5,13 @@
 
 package info.melda.sala.ztemezszam;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -25,6 +30,34 @@ public class PlayerActivity extends BaseActivity {
     private int playerIdIndex;
     private List<Integer> playerIds = new ArrayList<Integer>();
 
+    @Override
+    public void onCreate( Bundle icicle ) {
+        super.onCreate( icicle );
+        Bundle b = getIntent().getExtras();
+        if( b != null ) {
+            int foundPlayerIdIndex = playerIds.indexOf(b.getInt("playerId"));
+            if( foundPlayerIdIndex != -1 ) {
+                playerIdIndex = foundPlayerIdIndex;
+            }
+        }
+
+        list.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                Log.d(TAG, "long click pos"+" "+pos);
+                Intent intent = new Intent(PlayerActivity.this, SeasonActivity.class);
+                Bundle b = new Bundle();
+                int columnIndex =  getCursor().getColumnIndex("season_id");
+                Log.d( TAG, "columnIndex:"+columnIndex);
+                int seasonId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
+                Log.d( TAG, "seasonId:"+seasonId);
+                b.putInt("seasonId", seasonId);
+                intent.putExtras(b);
+                startActivity(intent);
+                return true;
+            }
+        });
+    }
     
     protected int getLayoutId() {
         return R.layout.player;
