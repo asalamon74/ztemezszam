@@ -5,7 +5,13 @@
 
 package info.melda.sala.ztemezszam;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -41,14 +47,24 @@ public class SeasonActivity extends BaseActivity {
         seasonIdIndex = seasonIds.size()-1;
     }
 
+    private String getSeasonId() {
+        String seasonId;
+        if( seasonIdIndex != -1 ) {
+            seasonId = String.valueOf(seasonIds.get( seasonIdIndex ));
+        } else {
+            seasonId = "-1";
+        }
+        return seasonId;
+    }
+
     protected Cursor getCursor() {
-        return db.rawQuery("select shirt_id _id, * from shirt, player where shirt.player_id=player.player_id and season_id=? order by shirt_number", new String [] { String.valueOf(seasonIds.get(seasonIdIndex))} );
+        return db.rawQuery("select shirt_id _id, * from shirt, player where shirt.player_id=player.player_id and season_id=? order by shirt_number", new String [] { getSeasonId()} );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor seasonNameCursor = db.rawQuery("select season_name from season where season_id="+seasonIds.get(seasonIdIndex), null);
+        Cursor seasonNameCursor = db.rawQuery("select season_name from season where season_id=?", new String[] { getSeasonId() });
         String seasonName;
         if( seasonNameCursor.moveToFirst() ) {
             seasonName = seasonNameCursor.getString(0);
@@ -59,6 +75,36 @@ public class SeasonActivity extends BaseActivity {
         titleSeason.setText(seasonName);
         adapter = new SimpleCursorAdapter(this, R.layout.season_row, getCursor(), FROM, TO);
         list.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate( icicle );
+
+        Bundle b = getIntent().getExtras();
+        if( b != null ) {
+            int foundSeasonIdIndex = seasonIds.indexOf(b.getInt("seasonId"));
+            if( foundSeasonIdIndex != -1 ) {
+                seasonIdIndex = foundSeasonIdIndex;
+            }
+        }
+
+        list.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                Log.d(TAG, "long click pos"+" "+pos);
+                Intent intent = new Intent(SeasonActivity.this, PlayerActivity.class);
+                Bundle b = new Bundle();
+                int columnIndex =  getCursor().getColumnIndex("player_id");
+                Log.d( TAG, "columnIndex:"+columnIndex);
+                int playerId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
+                Log.d( TAG, "playerId:"+playerId);
+                b.putInt("playerId", playerId);
+                intent.putExtras(b);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -76,5 +122,4 @@ public class SeasonActivity extends BaseActivity {
         }
         onResume();
     }
-
 }
