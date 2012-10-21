@@ -14,9 +14,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -35,8 +39,54 @@ public abstract class BaseActivity extends Activity {
     protected ListView list;
     private static final String SEND_ZTEDB_NOTIFICATION = "info.melda.sala.SEND_ZTEDB_UPDATED_NOTIFICATION";
 
+    private SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d( TAG, "onFling");
+            String swipe = "";
+            float sensitvity = 50;
+            if ((e1.getX() - e2.getX()) > sensitvity) {
+                swipe += "Swipe Left\n";
+                swipeLeftAction();
+            } else if ((e2.getX() - e1.getX()) > sensitvity) {
+                swipe += "Swipe Right\n";
+                swipeRightAction();
+            } else {
+                swipe += "\n";
+            }
+/*
+            if ((e1.getY() - e2.getY()) > sensitvity) {
+                swipe += "Swipe Up\n";
+            } else if ((e2.getY() - e1.getY()) > sensitvity) {
+                swipe += "Swipe Down\n";
+            } else {
+                swipe += "\n";
+            }*/
+            Log.d( TAG, "swipe: "+swipe);
+            return false;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            Log.d( TAG, "onDown");
+            return true;
+        }
+
+    };
+
+
+    protected GestureDetector gestureDetector  = new GestureDetector(simpleOnGestureListener);
+
     protected abstract int getLayoutId();
     protected abstract int getListId();
+    protected abstract void initDB();
+
+    protected void swipeRightAction() {
+    }
+    
+    protected void swipeLeftAction() {
+    }
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -49,8 +99,19 @@ public abstract class BaseActivity extends Activity {
         // Connect to database
         dbHelper = new DbHelper(this);
         db = dbHelper.getReadableDatabase();
+        initDB();
         receiver = new UpdateReceiver();
-        filter = new IntentFilter( UpdaterService.DB_UPDATED_INTENT );
+        filter = new IntentFilter(UpdaterService.DB_UPDATED_INTENT);
+
+        View swipeView = getWindow().getDecorView();
+        Log.d(TAG, "swipView:" + swipeView);
+        swipeView.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View v, MotionEvent event) {
+                //Log.d(TAG, "onTouch");
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
     @Override
@@ -100,13 +161,16 @@ public abstract class BaseActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            adapter.changeCursor(getCursor());
-            adapter.notifyDataSetChanged();
+            initDB();
+            onResume();
+            //adapter.changeCursor(getCursor());
+            //adapter.notifyDataSetChanged();
             Toast.makeText( BaseActivity.this, "Adatbázis frissítve", Toast.LENGTH_LONG).show();
             Log.d("UpdateReceiver", "onReceived");
             //titleSeason = (TextView) findViewById(R.id.titleSeason);
             //titleSeason.setText("aaaaaa");
         }
     }
+
 
 }

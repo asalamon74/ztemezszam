@@ -6,10 +6,11 @@
 package info.melda.sala.ztemezszam;
 
 import android.database.Cursor;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,7 +22,9 @@ public class PlayerActivity extends BaseActivity {
     private TextView titlePlayer;
     private static final String[] FROM = { "season_name", "shirt_number" };
     private static final int[] TO = { R.id.playerRowSeasonName, R.id.playerRowShirtNumber };
-    private int playerId=2;
+    private int playerIdIndex;
+    private List<Integer> playerIds = new ArrayList<Integer>();
+
     
     protected int getLayoutId() {
         return R.layout.player;
@@ -31,14 +34,23 @@ public class PlayerActivity extends BaseActivity {
         return R.id.listPlayer;
     }
 
+    protected void initDB() {
+        Cursor c = db.rawQuery("select player_id from player order by player_name", null);
+        playerIds.clear();
+        while( c.moveToNext() ) {
+            playerIds.add( c.getInt(0));
+        }
+        playerIdIndex = playerIds.size()-1;
+    }
+
     protected Cursor getCursor() {
-        return db.rawQuery("select shirt_id _id, * from shirt, season where shirt.season_id=season.season_id and player_id="+playerId+" order by season_id", null);
+        return db.rawQuery("select shirt_id _id, * from shirt, season where shirt.season_id=season.season_id and player_id=? order by season_id", new String [] { String.valueOf(playerIds.get(playerIdIndex))} );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = db.rawQuery("select player_name from player where player_id="+playerId, null);
+        Cursor cursor = db.rawQuery("select player_name from player where player_id="+playerIds.get(playerIdIndex), null);
         String playerName;
         if( cursor.moveToFirst() ) {
             playerName = cursor.getString(0);
@@ -50,5 +62,21 @@ public class PlayerActivity extends BaseActivity {
         adapter = new SimpleCursorAdapter(this, R.layout.player_row, getCursor(), FROM, TO);
         Log.d( TAG, "list:"+list);
         list.setAdapter(adapter);
+    }
+
+     @Override
+    protected void swipeRightAction() {
+        if( playerIdIndex > 0 ) {
+            --playerIdIndex;
+        }
+        onResume();
+    }
+
+    @Override
+    protected void swipeLeftAction() {
+        if( playerIdIndex < playerIds.size()-1 ) {
+            ++playerIdIndex;
+        }
+        onResume();
     }
 }
