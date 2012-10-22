@@ -149,6 +149,7 @@ public abstract class BaseActivity extends Activity {
                 startActivity(new Intent(this, PrefsActivity.class));
                 break;
             case R.id.itemManualSync:
+                Toast.makeText( this, "Adatbázis frissítése", Toast.LENGTH_SHORT).show();
                 startService(new Intent(this, UpdaterService.class));
                 break;
             }

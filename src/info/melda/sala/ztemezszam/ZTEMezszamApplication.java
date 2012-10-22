@@ -6,9 +6,11 @@
 package info.melda.sala.ztemezszam;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  *
@@ -22,6 +24,10 @@ public class ZTEMezszamApplication extends Application {
     public void onCreate() {
         super.onCreate();
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if( isStartSync() ) {
+            Toast.makeText( this, "Adatbázis frissítése", Toast.LENGTH_SHORT).show();
+            startService(new Intent(this, UpdaterService.class));
+        }
         Log.i(TAG, "onCreated");
     }
 

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package info.melda.sala.ztemezszam;
 
 import android.os.Bundle;
@@ -20,5 +15,4 @@ public class PrefsActivity extends PreferenceActivity {
         super.onCreate(icicle);
         addPreferencesFromResource(R.xml.prefs);
     }
-
 }

@@ -6,7 +6,7 @@
     </item>
   <item android:title="@string/titleManualSync"
     android:id="@+id/itemManualSync"
-    android:icon="@android:drawable/ic_popup_sync">
+    android:icon="@android:drawable/ic_menu_rotate">
     </item>
 </menu>
 
