@@ -2,13 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical" 
   android:layout_height="fill_parent"
-  android:layout_width="fill_parent">
-  <TextView android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:textColor="#fff"
-    android:textSize="30sp"
-    android:id="@+id/titlePlayer"/>
+  android:layout_width="fill_parent"
+  android:textColor="#ffffff">
+      <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <ImageView
+            android:src="@drawable/zte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4sp"/>
+        <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            android:id="@+id/titlePlayer"/>
+      </LinearLayout>
 
   <ListView android:layout_height="fill_parent"
     android:layout_width="fill_parent" 
