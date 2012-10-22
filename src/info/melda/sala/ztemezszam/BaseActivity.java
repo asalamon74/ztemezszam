@@ -41,6 +41,13 @@ public abstract class BaseActivity extends Activity {
 
     private SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
 
+        
+        @Override
+        public void onLongPress(MotionEvent e) {
+            Log.d( TAG, "onLongPress");
+            longPressAction();
+        }
+
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             Log.d( TAG, "onFling");
@@ -53,7 +60,7 @@ public abstract class BaseActivity extends Activity {
                 swipe += "Swipe Right\n";
                 swipeRightAction();
             } else {
-                swipe += "\n";
+                 swipe += "\n";
             }
 /*
             if ((e1.getY() - e2.getY()) > sensitvity) {
@@ -93,6 +100,9 @@ public abstract class BaseActivity extends Activity {
     }
     
     protected void swipeLeftAction() {
+    }
+
+    protected void longPressAction() {
     }
 
     @Override

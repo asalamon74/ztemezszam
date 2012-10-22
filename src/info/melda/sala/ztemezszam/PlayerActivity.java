@@ -40,6 +40,8 @@ public class PlayerActivity extends BaseActivity {
             }
         }
 
+        titlePlayer = (TextView) findViewById(R.id.titlePlayer);
+
         list.setOnItemLongClickListener(new OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
@@ -102,7 +104,6 @@ public class PlayerActivity extends BaseActivity {
         } else {
             playerName = "????";
         }
-        titlePlayer = (TextView) findViewById(R.id.titlePlayer);
         titlePlayer.setText(playerName);
     }
 
@@ -120,5 +121,10 @@ public class PlayerActivity extends BaseActivity {
             ++playerIdIndex;
         }
         onResume();
+    }
+
+    @Override
+    protected void longPressAction() {
+        startActivity( new Intent( this, PlayerListActivity.class) );
     }
 }
