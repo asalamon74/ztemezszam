@@ -6,7 +6,9 @@
     </item>
   <item android:title="@string/titleManualSync"
     android:id="@+id/itemManualSync"
-    android:icon="@android:drawable/ic_menu_rotate">
-    </item>
+    android:icon="@android:drawable/ic_menu_rotate" />
+  <item android:title="@string/titlePlayerList"
+    android:id="@+id/itemPlayerList"
+    android:icon="@drawable/player_list"/>
 </menu>
 

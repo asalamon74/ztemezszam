@@ -80,7 +80,14 @@ public abstract class BaseActivity extends Activity {
 
     protected abstract int getLayoutId();
     protected abstract int getListId();
-    protected abstract void initDB();
+
+    protected abstract String[] getAdapterFrom();
+    protected abstract int[] getAdapterTo();
+    protected abstract int getAdapterLayoutRow();
+
+    protected void initDB() {
+        // basic implementation does nothing
+    }
 
     protected void swipeRightAction() {
     }
@@ -123,6 +130,9 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        adapter = new SimpleCursorAdapter(this, getAdapterLayoutRow(), getCursor(), getAdapterFrom(), getAdapterTo());
+        Log.d( TAG, "list:"+list);
+        list.setAdapter(adapter);
         registerReceiver(receiver, filter, SEND_ZTEDB_NOTIFICATION, null );
     }
 
@@ -151,6 +161,9 @@ public abstract class BaseActivity extends Activity {
             case R.id.itemManualSync:
                 Toast.makeText( this, "Adatbázis frissítése", Toast.LENGTH_SHORT).show();
                 startService(new Intent(this, UpdaterService.class));
+                break;
+            case R.id.itemPlayerList:
+                startActivity(new Intent(this, PlayerListActivity.class));
                 break;
             }
         return true;

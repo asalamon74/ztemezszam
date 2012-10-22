@@ -23,6 +23,8 @@
         </activity>
         <activity android:name=".PrefsActivity" 
               android:label="@string/titlePrefs" />
+        <activity android:name=".PlayerListActivity"
+              android:label="@string/titlePlayerList" />
         <service android:name=".UpdaterService" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

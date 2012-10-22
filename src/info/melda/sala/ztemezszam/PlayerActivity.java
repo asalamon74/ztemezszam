@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +66,7 @@ public class PlayerActivity extends BaseActivity {
         return R.id.listPlayer;
     }
 
+    @Override
     protected void initDB() {
         Cursor c = db.rawQuery("select player_id from player order by player_name", null);
         playerIds.clear();
@@ -78,6 +78,18 @@ public class PlayerActivity extends BaseActivity {
 
     protected Cursor getCursor() {
         return db.rawQuery("select shirt_id _id, * from shirt, season where shirt.season_id=season.season_id and player_id=? order by season_id", new String [] { String.valueOf(playerIds.get(playerIdIndex))} );
+    }
+
+    protected String[] getAdapterFrom() {
+        return FROM;
+    }
+
+    protected int[] getAdapterTo() {
+        return TO;
+    }
+
+    protected int getAdapterLayoutRow() {
+        return R.layout.player_row;
     }
 
     @Override
@@ -92,9 +104,6 @@ public class PlayerActivity extends BaseActivity {
         }
         titlePlayer = (TextView) findViewById(R.id.titlePlayer);
         titlePlayer.setText(playerName);
-        adapter = new SimpleCursorAdapter(this, R.layout.player_row, getCursor(), FROM, TO);
-        Log.d( TAG, "list:"+list);
-        list.setAdapter(adapter);
     }
 
      @Override
