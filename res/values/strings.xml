@@ -5,6 +5,7 @@
     <string name="titleManualSync">Szinkronizálás</string>
     <string name="titleStartSync">Szinkronizálás induláskor</string>
     <string name="titlePlayerList">Játékosok</string>
+    <string name="titleSeasonList">Szezonok</string>
     <string name="summaryStartSync">Mezszámfrissítés letöltése a program indításakor</string>
     <string name="send_ztedb_updated_notifications_permission_label">Sends ZTEDB Notifications</string>
     <string name="send_ztedb_updated_notifications_permission_description">Allow this application to send ZTEDB

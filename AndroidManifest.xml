@@ -25,6 +25,8 @@
               android:label="@string/titlePrefs" />
         <activity android:name=".PlayerListActivity"
               android:label="@string/titlePlayerList" />
+        <activity android:name=".SeasonListActivity"
+              android:label="@string/titleSeasonList" />
         <service android:name=".UpdaterService" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

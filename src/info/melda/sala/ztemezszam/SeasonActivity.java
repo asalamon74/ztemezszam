@@ -132,4 +132,9 @@ public class SeasonActivity extends BaseActivity {
         }
         onResume();
     }
+
+    @Override
+    protected void longPressAction() {
+        startActivity( new Intent( this, SeasonListActivity.class) );
+    }
 }

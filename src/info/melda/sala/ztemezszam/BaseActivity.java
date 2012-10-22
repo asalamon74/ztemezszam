@@ -175,7 +175,10 @@ public abstract class BaseActivity extends Activity {
             case R.id.itemPlayerList:
                 startActivity(new Intent(this, PlayerListActivity.class));
                 break;
-            }
+            case R.id.itemSeasonList:
+                startActivity(new Intent(this, SeasonListActivity.class));
+                break;
+        }
         return true;
     }
 
