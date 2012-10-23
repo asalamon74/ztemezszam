@@ -21,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -36,7 +38,7 @@ public abstract class BaseActivity extends Activity {
     private UpdateReceiver receiver;
     private IntentFilter filter;
     protected SimpleCursorAdapter adapter;
-    protected ListView list;
+    protected AbsListView list;
     private static final String SEND_ZTEDB_NOTIFICATION = "info.melda.sala.SEND_ZTEDB_UPDATED_NOTIFICATION";
 
     private SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
@@ -111,7 +113,7 @@ public abstract class BaseActivity extends Activity {
         setContentView(getLayoutId());
         Log.d( TAG, "onCreate");
         Log.d( TAG, "id:"+getListId());
-        list = (ListView) findViewById( getListId() );
+        list = (AbsListView) findViewById( getListId() );
         Log.d( TAG, "list:"+list);
         // Connect to database
         dbHelper = new DbHelper(this);
@@ -142,7 +144,13 @@ public abstract class BaseActivity extends Activity {
         super.onResume();
         adapter = new SimpleCursorAdapter(this, getAdapterLayoutRow(), getCursor(), getAdapterFrom(), getAdapterTo());
         Log.d( TAG, "list:"+list);
-        list.setAdapter(adapter);
+        // hack to avoid calling AbsListView.setAdapter
+        // since it requires API level 11
+        if( list instanceof ListView ) {
+            ((ListView)list).setAdapter(adapter);
+        } else if( list instanceof GridView ) {
+            ((GridView)list).setAdapter(adapter);
+        }
         registerReceiver(receiver, filter, SEND_ZTEDB_NOTIFICATION, null );
     }
 
@@ -177,6 +185,9 @@ public abstract class BaseActivity extends Activity {
                 break;
             case R.id.itemSeasonList:
                 startActivity(new Intent(this, SeasonListActivity.class));
+                break;
+            case R.id.itemShirtList:
+                startActivity(new Intent(this, ShirtListActivity.class));
                 break;
         }
         return true;

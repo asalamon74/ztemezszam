@@ -13,5 +13,8 @@
   <item android:title="@string/titleSeasonList"
     android:id="@+id/itemSeasonList"
     android:icon="@drawable/calendar"/>
+  <item android:title="@string/titleShirtList"
+    android:id="@+id/itemShirtList"
+    android:icon="@drawable/shirt"/>
 </menu>
 
