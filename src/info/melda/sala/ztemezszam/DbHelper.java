@@ -113,7 +113,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String line;
         StringTokenizer st;
         while ((line = reader.readLine()) != null) {
-            //Log.d( TAG, "seasonline: "+line);
+            Log.d( TAG, "seasonline: "+line);
             st = new StringTokenizer(line, ",");
             Object[] season = new Object[2];
             season[0] = st.nextToken();

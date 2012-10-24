@@ -7,6 +7,8 @@
     <string name="titlePlayerList">Játékosok</string>
     <string name="titleSeasonList">Szezonok</string>
     <string name="titleShirtList">Mezszámok</string>
+    <string name="updateFail">Adatbázisfrissítés sikertelen</string>
+    <string name="updateSuccess">Adatbázis frissítve</string>
     <string name="summaryStartSync">Mezszámfrissítés letöltése a program indításakor</string>
     <string name="send_ztedb_updated_notifications_permission_label">Sends ZTEDB Notifications</string>
     <string name="send_ztedb_updated_notifications_permission_description">Allow this application to send ZTEDB

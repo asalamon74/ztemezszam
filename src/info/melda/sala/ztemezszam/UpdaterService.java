@@ -1,25 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package info.melda.sala.ztemezszam;
 
 import android.app.Service;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 /**
  *
@@ -28,9 +27,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class UpdaterService extends Service {
 
     private static final String TAG = "UpdaterService";
+    static final int UPDATER_FAIL    = -1;
+    static final int UPDATER_NONEED  = 0;
+    static final int UPDATER_SUCCESS = 1;
+
     public static final String DB_UPDATED_INTENT = "info.melda.sala.DB_UPDATED";
     private Updater updater;
-    private ZTEMezszamApplication application;
+//    private ZTEMezszamApplication application;
     
     @Override
     public IBinder onBind(Intent intent) {
@@ -40,7 +43,7 @@ public class UpdaterService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.application = (ZTEMezszamApplication) getApplication();
+//        this.application = (ZTEMezszamApplication) getApplication();
         Log.d(TAG, "onCreated");
     }
 
@@ -65,9 +68,10 @@ public class UpdaterService extends Service {
     /**
      * Thread that performs the actual update from the online service
      */
-    private class Updater extends AsyncTask<String,String,String> {
+    private class Updater extends AsyncTask<Void,String,Integer> {
 
         static final String RECEIVE_ZTEDB_NOTIFICATION = "info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION";
+
         private DbHelper dbHelper;
         private SQLiteDatabase db;
         private Intent intent;
@@ -78,10 +82,15 @@ public class UpdaterService extends Service {
         }
 
         BufferedReader readURL(String fileName) throws IOException {
-            DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpGet httppost = new HttpGet("http://sala.melda.info/mezszam/"+fileName);
+            HttpParams httpParameters = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 1000 );
+            HttpConnectionParams.setSoTimeout(httpParameters, 2000);
+            DefaultHttpClient httpclient = new DefaultHttpClient( httpParameters);
+            Log.d(TAG, "before execute ");
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity ht = response.getEntity();
+            Log.d(TAG, "after execute ");
 
             BufferedHttpEntity buf = new BufferedHttpEntity(ht);
             InputStream is = buf.getContent();
@@ -89,11 +98,10 @@ public class UpdaterService extends Service {
             return new BufferedReader(new InputStreamReader(is));
         }
 
-        protected String doInBackground(String... params) {
+        protected Integer doInBackground(Void... params) {
             Log.d(TAG, "Updater running");
             try {
                 BufferedReader r = readURL("seasons.csv");
-                String line;
                 db.beginTransaction();
                 DbHelper.processSeasons(db, r);
                 r = readURL("players.csv");
@@ -102,20 +110,23 @@ public class UpdaterService extends Service {
                 DbHelper.processShirts( db, r );
                 db.setTransactionSuccessful();
                 db.endTransaction();
-
-//                Thread.sleep(Long.MAX_VALUE);
+                return UPDATER_SUCCESS;
             } catch( Exception e) {
-                Log.d(TAG, "Exception" + e);
+                Log.d(TAG, e.getMessage(), e);
+                return UPDATER_FAIL;
+            } finally {
+                Log.d(TAG, "Updater ran");
             }
-            Log.d(TAG, "Updater ran");
-            return null;
         }
 
         // Called once the background activity has completed
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Integer result) {
             UpdaterService updaterService = UpdaterService.this;
-            intent = new Intent( DB_UPDATED_INTENT);
+            intent = new Intent( DB_UPDATED_INTENT );
+            Bundle b = new Bundle();
+            b.putInt("result", result);
+            intent.putExtras(b);
             updaterService.sendBroadcast(intent, RECEIVE_ZTEDB_NOTIFICATION);
         }
     }

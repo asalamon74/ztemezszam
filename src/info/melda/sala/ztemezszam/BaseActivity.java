@@ -199,14 +199,19 @@ public abstract class BaseActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            initDB();
-            onResume();
-            //adapter.changeCursor(getCursor());
-            //adapter.notifyDataSetChanged();
-            Toast.makeText( BaseActivity.this, "Adatbázis frissítve", Toast.LENGTH_LONG).show();
             Log.d("UpdateReceiver", "onReceived");
-            //titleSeason = (TextView) findViewById(R.id.titleSeason);
-            //titleSeason.setText("aaaaaa");
+            int result = (Integer)intent.getExtras().get("result");
+            switch( result ) {
+                case UpdaterService.UPDATER_FAIL:
+                    Toast.makeText( BaseActivity.this, R.string.updateFail, Toast.LENGTH_LONG).show();
+                    break;
+                case UpdaterService.UPDATER_SUCCESS:
+                    initDB();
+                    onResume();
+                    Toast.makeText( BaseActivity.this, R.string.updateSuccess, Toast.LENGTH_LONG).show();
+                    break;
+            }
+            
         }
     }
 
