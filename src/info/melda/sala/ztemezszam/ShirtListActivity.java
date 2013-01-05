@@ -3,10 +3,9 @@ package info.melda.sala.ztemezszam;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  *
@@ -23,20 +22,19 @@ public class ShirtListActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        list.setOnItemLongClickListener(new OnItemLongClickListener() {
+        list.setOnItemClickListener(new OnItemClickListener() {
 
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                Log.d(TAG, "long click pos"+" "+pos);
+            public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                //Log.d(TAG, "click pos"+" "+pos);
                 Intent intent = new Intent(ShirtListActivity.this, ShirtActivity.class);
                 Bundle b = new Bundle();
                 int columnIndex =  getCursor().getColumnIndex("shirt_number");
-                Log.d( TAG, "columnIndex:"+columnIndex);
+                //Log.d( TAG, "columnIndex:"+columnIndex);
                 int shirtNumber = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
-                Log.d( TAG, "shirtNumber:"+shirtNumber);
+                //Log.d( TAG, "shirtNumber:"+shirtNumber);
                 b.putInt("shirtNumber", shirtNumber);
                 intent.putExtras(b);
                 startActivity(intent);
-                return true;
             }
         });
     }

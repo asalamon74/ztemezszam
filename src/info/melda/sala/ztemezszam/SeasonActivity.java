@@ -8,10 +8,9 @@ package info.melda.sala.ztemezszam;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,20 +98,19 @@ public class SeasonActivity extends BaseActivity {
             }
         }
 
-        list.setOnItemLongClickListener(new OnItemLongClickListener() {
+        list.setOnItemClickListener(new OnItemClickListener() {
 
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                Log.d(TAG, "long click pos"+" "+pos);
+            public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                //Log.d(TAG, "click pos"+" "+pos);
                 Intent intent = new Intent(SeasonActivity.this, PlayerActivity.class);
                 Bundle b = new Bundle();
                 int columnIndex =  getCursor().getColumnIndex("player_id");
-                Log.d( TAG, "columnIndex:"+columnIndex);
+                //Log.d( TAG, "columnIndex:"+columnIndex);
                 int playerId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
-                Log.d( TAG, "playerId:"+playerId);
+                //Log.d( TAG, "playerId:"+playerId);
                 b.putInt("playerId", playerId);
                 intent.putExtras(b);
                 startActivity(intent);
-                return true;
             }
         });
     }
