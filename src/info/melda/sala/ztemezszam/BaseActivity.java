@@ -210,6 +210,9 @@ public abstract class BaseActivity extends Activity {
                     onResume();
                     Toast.makeText( BaseActivity.this, R.string.updateSuccess, Toast.LENGTH_LONG).show();
                     break;
+                case UpdaterService.UPDATER_OBSOLETE:
+                    Toast.makeText( BaseActivity.this, R.string.updateObsolete, Toast.LENGTH_LONG).show();
+                    break;
             }
             
         }

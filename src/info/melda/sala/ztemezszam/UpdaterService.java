@@ -30,6 +30,7 @@ public class UpdaterService extends Service {
     static final int UPDATER_FAIL    = -1;
     static final int UPDATER_NONEED  = 0;
     static final int UPDATER_SUCCESS = 1;
+    static final int UPDATER_OBSOLETE = 2;
 
     public static final String DB_UPDATED_INTENT = "info.melda.sala.DB_UPDATED";
     private Updater updater;
@@ -101,16 +102,23 @@ public class UpdaterService extends Service {
         protected Integer doInBackground(Void... params) {
             Log.d(TAG, "Updater running");
             try {
-                BufferedReader r = readURL("seasons.csv");
+                BufferedReader r = readURL("conf.csv");
                 db.beginTransaction();
-                DbHelper.processSeasons(db, r);
-                r = readURL("players.csv");
-                DbHelper.processPlayers( db, r );
-                r = readURL("shirts.csv");
-                DbHelper.processShirts( db, r );
-                db.setTransactionSuccessful();
-                db.endTransaction();
-                return UPDATER_SUCCESS;
+                if( DbHelper.processConf(db, r) ) {
+                    r = readURL("seasons.csv");
+                    DbHelper.processSeasons(db, r);
+                    r = readURL("players.csv");
+                    DbHelper.processPlayers( db, r );
+                    r = readURL("shirts.csv");
+                    DbHelper.processShirts( db, r );
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    return UPDATER_SUCCESS;
+                } else {
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    return UPDATER_OBSOLETE;
+                }
             } catch( Exception e) {
                 Log.d(TAG, e.getMessage(), e);
                 return UPDATER_FAIL;

@@ -7,6 +7,7 @@ package info.melda.sala.ztemezszam;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d( TAG, "onCreate" );
+        db.execSQL("create table conf ( conf_id int primary key, csv_version int )");
         db.execSQL("create table season ( season_id int primary key, season_name text )");
         db.execSQL("create table player ( player_id int primary key, player_name text )");
         db.execSQL("create table shirt ( shirt_id int primary key, player_id int, season_id int, shirt_number int )");
@@ -53,6 +55,11 @@ public class DbHelper extends SQLiteOpenHelper {
             in_s = res.openRawResource(R.raw.players);
             reader = new BufferedReader( new InputStreamReader(in_s));
             processPlayers( db, reader );
+
+            in_s = res.openRawResource(R.raw.conf);
+            reader = new BufferedReader( new InputStreamReader(in_s));
+            processConf( db, reader );
+
             /*String line;
             while ( (line = reader.readLine()) != null) {
                 Log.d( TAG, "line: "+line);
@@ -121,6 +128,35 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL("insert into season (season_id, season_name) values (?,?)", season);
         }
     }
+
+    static boolean processConf(SQLiteDatabase db, BufferedReader reader) throws IOException {
+
+        String line = reader.readLine();
+        if( line == null ) {
+            return false;
+        }
+
+        StringTokenizer st = new StringTokenizer(line, ",");
+        Object[] conf = new Object[1];
+        conf[0] = st.nextToken();
+        int newCsvVersion = Integer.parseInt((String)conf[0]);
+
+        Cursor currentConf = db.rawQuery("select csv_version from conf", null);
+        if( !currentConf.moveToFirst() ) {
+            db.execSQL("insert into conf (conf_id, csv_version) values (1, ?)", conf);
+            return true;
+        } else {
+            int currentCsvVersion = currentConf.getInt(0);
+            if( currentCsvVersion == newCsvVersion ) {
+                db.execSQL("delete from conf");
+                db.execSQL("insert into conf (conf_id, csv_version) values (1, ?)", conf);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
