@@ -35,7 +35,7 @@ public class PlayerActivity extends BaseActivity {
         }
 
         titlePlayer = (TextView) findViewById(R.id.titlePlayer);
-
+        
         list.setOnItemClickListener(new OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
@@ -90,14 +90,22 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = db.rawQuery("select player_name from player where player_id="+playerIds.get(playerIdIndex), null);
+        Cursor cursor = db.rawQuery("select player_name, strftime('%Y.%m.%d.',player_dob) from player where player_id="+playerIds.get(playerIdIndex), null);
         String playerName;
+        String playerDob;
         if( cursor.moveToFirst() ) {
             playerName = cursor.getString(0);
+            playerDob = cursor.getString(1);
+            if( playerDob != null ) {
+                playerDob = " "+playerDob;
+            } else {
+                playerDob = "";
+            }
         } else {
             playerName = "????";
+            playerDob = " ????";
         }
-        titlePlayer.setText(playerName);
+        titlePlayer.setText(playerName+playerDob);
     }
 
      @Override

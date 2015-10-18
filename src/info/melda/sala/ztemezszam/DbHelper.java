@@ -15,6 +15,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -25,7 +30,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
     private static final String DB_NAME = "ztemezszam.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private Context context;
 
     // Constructor
@@ -39,7 +44,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.d( TAG, "onCreate" );
         db.execSQL("create table conf ( conf_id int primary key, csv_version int )");
         db.execSQL("create table season ( season_id int primary key, season_name text )");
-        db.execSQL("create table player ( player_id int primary key, player_name text )");
+        db.execSQL("create table player ( player_id int primary key, player_name text, player_dob real )");
         db.execSQL("create table shirt ( shirt_id int primary key, player_id int, season_id int, shirt_number int )");
         // read data from resource files
         try {
@@ -68,7 +73,7 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.e(TAG, e.getMessage(), e);
         }
     }
-
+        
     static void processShirts(SQLiteDatabase db, BufferedReader reader) throws IOException {
         db.execSQL("delete from shirt");
         String line;
@@ -98,19 +103,42 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
     }
+    
+    // http://stackoverflow.com/a/466348/21348
+    private static double getJulianFromUnix( int unixSecs ) {
+        return ( unixSecs / 86400.0 ) + 2440587.5;
+    }
 
     static void processPlayers(SQLiteDatabase db, BufferedReader reader) throws IOException {
         db.execSQL("delete from player");
         String line;
         StringTokenizer st;
+        SimpleDateFormat idf = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);      
         while ((line = reader.readLine()) != null) {
             //Log.d( TAG, "playerline: "+line);
-            st = new StringTokenizer(line, ",");
-            //Log.d( TAG, "tokennum: "+st.countTokens());
-            Object[] player = new Object[2];
+            st = new StringTokenizer(line, ",");            
+            Object[] player = new Object[3];
             player[0] = st.nextToken();
             player[1] = st.nextToken();
-            db.execSQL("insert into player (player_id, player_name) values (?, ?)", player);
+            // dob is optional
+            Double dob;
+            if( st.countTokens() == 0 ) {
+                dob = null;
+            } else {
+                try {
+                    Date dobDate = idf.parse(st.nextToken());
+                    GregorianCalendar gc = new GregorianCalendar();
+                    gc.setTime(dobDate);
+                    long millis = gc.getTime().getTime();
+                    dob = getJulianFromUnix ( (int)(millis / 1000) );
+                } catch( ParseException e ) {
+                    Log.e( TAG, "dob parse exception", e);
+                    dob = null;
+                }
+                
+            }
+            player[2] = dob;
+            db.execSQL("insert into player (player_id, player_name, player_dob) values (?, ?, ?)", player);
         }
 
     }
@@ -157,13 +185,17 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.d(TAG, "onUpgrade");
-        // drop the database and recreate
-        db.execSQL("drop table if exists season");
-        onCreate(db);
+    public void onUpgrade (SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d( TAG, "upgrading db:"+oldVersion+" -> "+newVersion);
+        int upgradeTo = oldVersion + 1;
+        while (upgradeTo <= newVersion) {
+            switch (upgradeTo) {
+                case 2:
+                    db.execSQL("alter table player add column player_dob real");
+                    break;
+            }
+            upgradeTo++;
+        }
     }
-
+    
 }

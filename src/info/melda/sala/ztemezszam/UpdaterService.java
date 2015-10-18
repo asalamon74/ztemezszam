@@ -34,7 +34,6 @@ public class UpdaterService extends Service {
 
     public static final String DB_UPDATED_INTENT = "info.melda.sala.DB_UPDATED";
     private Updater updater;
-//    private ZTEMezszamApplication application;
     
     @Override
     public IBinder onBind(Intent intent) {
@@ -44,7 +43,6 @@ public class UpdaterService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-//        this.application = (ZTEMezszamApplication) getApplication();
         Log.d(TAG, "onCreated");
     }
 
