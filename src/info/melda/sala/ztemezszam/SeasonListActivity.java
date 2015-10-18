@@ -51,7 +51,7 @@ public class SeasonListActivity extends BaseActivity {
 
     @Override
     protected Cursor getCursor() {
-        return db.rawQuery("select season_id _id, * from season order by season_name", null);
+        return db.rawQuery("select season_id _id, * from season order by season_id", null);
     }
 
     @Override
