@@ -21,12 +21,11 @@ import java.util.List;
  */
 public class SeasonActivity extends BaseActivity {
 
-    private static final String TAG = "SeasonActivity";
-    private TextView titleSeason;
+    //private static final String TAG = "SeasonActivity";
     private static final String[] FROM = { "shirt_number", "player_name" };
     private static final int[] TO = { R.id.seasonRowShirtNumber, R.id.seasonRowPlayerName };
     private int seasonIdIndex;
-    private List<Integer> seasonIds = new ArrayList<Integer>();
+    private final List<Integer> seasonIds = new ArrayList<Integer>();
     
     protected int getLayoutId() {
         return R.layout.season;
@@ -82,7 +81,7 @@ public class SeasonActivity extends BaseActivity {
         } else {
             seasonName = "????";
         }
-        titleSeason = (TextView) findViewById(R.id.titleSeason);
+        TextView titleSeason = (TextView) findViewById(R.id.titleSeason);
         titleSeason.setText(seasonName);
     }
 

@@ -13,7 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class ShirtListActivity extends BaseActivity {
 
-    private static final String TAG = "ShirtListActivity";
+    //private static final String TAG = "ShirtListActivity";
     private static final String[] FROM = { "shirt_number" };
     private static final int[] TO = { R.id.shirtListShirtNumber };
 

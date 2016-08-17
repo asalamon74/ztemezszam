@@ -16,12 +16,12 @@ import java.util.List;
  */
 public class PlayerActivity extends BaseActivity {
 
-    private static final String TAG = "PlayerActivity";
+    //private static final String TAG = "PlayerActivity";
     private TextView titlePlayer;
     private static final String[] FROM = { "season_name", "shirt_number" };
     private static final int[] TO = { R.id.playerRowSeasonName, R.id.playerRowShirtNumber };
     private int playerIdIndex;
-    private List<Integer> playerIds = new ArrayList<Integer>();
+    private final List<Integer> playerIds = new ArrayList<Integer>();
 
     @Override
     public void onCreate( Bundle icicle ) {

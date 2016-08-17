@@ -22,7 +22,7 @@ public class ShirtActivity extends BaseActivity {
     private static final String[] FROM = { "season_name", "player_name" };
     private static final int[] TO = { R.id.shirtRowSeasonName, R.id.shirtRowPlayerName };
     private int shirtNumberIndex;
-    private List<Integer> shirtNumbers = new ArrayList<Integer>();
+    private final List<Integer> shirtNumbers = new ArrayList<Integer>();
 
     @Override
     public void onCreate( Bundle icicle ) {

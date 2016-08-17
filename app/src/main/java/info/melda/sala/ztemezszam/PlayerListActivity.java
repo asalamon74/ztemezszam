@@ -3,7 +3,6 @@ package info.melda.sala.ztemezszam;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,7 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class PlayerListActivity extends BaseActivity {
 
-    private static final String TAG = "PlayerListActivity";
+    //private static final String TAG = "PlayerListActivity";
     private static final String[] FROM = { "player_name" };
     private static final int[] TO = { R.id.playerListPlayerName };
 

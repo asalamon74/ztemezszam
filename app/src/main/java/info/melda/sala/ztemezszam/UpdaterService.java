@@ -28,7 +28,7 @@ public class UpdaterService extends Service {
 
     private static final String TAG = "UpdaterService";
     static final int UPDATER_FAIL    = -1;
-    static final int UPDATER_NONEED  = 0;
+    //static final int UPDATER_NONEED  = 0;
     static final int UPDATER_SUCCESS = 1;
     static final int UPDATER_OBSOLETE = 2;
 
@@ -71,8 +71,8 @@ public class UpdaterService extends Service {
 
         static final String RECEIVE_ZTEDB_NOTIFICATION = "info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION";
 
-        private DbHelper dbHelper;
-        private SQLiteDatabase db;
+        private final DbHelper dbHelper;
+        private final SQLiteDatabase db;
         private Intent intent;
 
         Updater() {

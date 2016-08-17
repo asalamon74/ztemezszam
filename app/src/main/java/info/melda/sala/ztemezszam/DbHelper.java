@@ -26,12 +26,12 @@ import java.util.StringTokenizer;
  *
  * @author salamon
  */
-public class DbHelper extends SQLiteOpenHelper {
+class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
     private static final String DB_NAME = "ztemezszam.db";
     private static final int DB_VERSION = 2;
-    private Context context;
+    private final Context context;
 
     // Constructor
     public DbHelper(Context context) {

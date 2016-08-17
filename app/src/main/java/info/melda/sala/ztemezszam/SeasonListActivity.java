@@ -13,7 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class SeasonListActivity extends BaseActivity {
 
-    private static final String TAG = "SeasonListActivity";
+    //private static final String TAG = "SeasonListActivity";
     private static final String[] FROM = { "season_name" };
     private static final int[] TO = { R.id.seasonListSeasonName };
 

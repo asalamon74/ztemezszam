@@ -33,15 +33,14 @@ import android.widget.Toast;
  */
 public abstract class BaseActivity extends Activity {
     private static final String TAG = "BaseActivity";
-    private DbHelper dbHelper;
-    protected SQLiteDatabase db;
+    SQLiteDatabase db;
     private UpdateReceiver receiver;
     private IntentFilter filter;
-    protected SimpleCursorAdapter adapter;
-    protected AbsListView list;
+    SimpleCursorAdapter adapter;
+    AbsListView list;
     private static final String SEND_ZTEDB_NOTIFICATION = "info.melda.sala.SEND_ZTEDB_UPDATED_NOTIFICATION";
 
-    private SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
+    private final SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
 
         
         @Override
@@ -85,7 +84,7 @@ public abstract class BaseActivity extends Activity {
     };
 
 
-    protected GestureDetector gestureDetector  = new GestureDetector(simpleOnGestureListener);
+    private final GestureDetector gestureDetector  = new GestureDetector(simpleOnGestureListener);
 
     protected abstract int getLayoutId();
     protected abstract int getListId();
@@ -94,17 +93,17 @@ public abstract class BaseActivity extends Activity {
     protected abstract int[] getAdapterTo();
     protected abstract int getAdapterLayoutRow();
 
-    protected void initDB() {
+    void initDB() {
         // basic implementation does nothing
     }
 
-    protected void swipeRightAction() {
-    }
-    
-    protected void swipeLeftAction() {
+    void swipeRightAction() {
     }
 
-    protected void longPressAction() {
+    void swipeLeftAction() {
+    }
+
+    void longPressAction() {
     }
 
     @Override
@@ -116,7 +115,7 @@ public abstract class BaseActivity extends Activity {
         list = (AbsListView) findViewById( getListId() );
         Log.d( TAG, "list:"+list);
         // Connect to database
-        dbHelper = new DbHelper(this);
+        DbHelper dbHelper = new DbHelper(this);
         db = dbHelper.getReadableDatabase();
         initDB();
         receiver = new UpdateReceiver();
