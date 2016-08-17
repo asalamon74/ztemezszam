@@ -7,7 +7,8 @@
     <application
         android:label="@string/app_name"
         android:icon="@drawable/zteicon"
-        android:name=".ZTEMezszamApplication">>
+        android:name=".ZTEMezszamApplication"
+        android:allowBackup="true">
         <activity android:name="SeasonActivity"
                   android:label="@string/app_name">
             <intent-filter>
