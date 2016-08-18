@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 16
+    compileSdkVersion 23
     buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "info.melda.sala.ztemezszam"
-        minSdkVersion 5
-        targetSdkVersion 5
+        minSdkVersion 9
+        targetSdkVersion 9
         project.ext.set("archivesBaseName", "info.melda.sala.ZTEMezszam" );
     }
 
@@ -17,4 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    useLibrary 'org.apache.http.legacy'
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:+'
 }

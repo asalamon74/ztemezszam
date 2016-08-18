@@ -7,12 +7,6 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
-        <ImageView
-            android:src="@drawable/zte"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="4sp"
-            android:contentDescription="@string/zteLogo"/>
         <TextView android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

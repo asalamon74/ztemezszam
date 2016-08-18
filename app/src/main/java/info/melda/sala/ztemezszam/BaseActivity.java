@@ -26,12 +26,13 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  *
  * @author salamon
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     SQLiteDatabase db;
     private UpdateReceiver receiver;
@@ -110,6 +111,10 @@ public abstract class BaseActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(getLayoutId());
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.zteicon);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle(" ZTE Mezszám");
         Log.d( TAG, "onCreate");
         Log.d( TAG, "id:"+getListId());
         list = (AbsListView) findViewById( getListId() );
