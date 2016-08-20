@@ -18,4 +18,5 @@
     <string name="receive_ztedb_updated_notifications_permission_description">Allow this application to receive ZTEDB
     notifications from other applications</string>
     <string name="zteLogo">ZTE címer</string>
+    <string name="titlePlayer">%1$s %2$s</string>
 </resources>

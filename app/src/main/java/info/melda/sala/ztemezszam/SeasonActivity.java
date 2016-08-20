@@ -25,7 +25,7 @@ public class SeasonActivity extends BaseActivity {
     private static final String[] FROM = { "shirt_number", "player_name" };
     private static final int[] TO = { R.id.seasonRowShirtNumber, R.id.seasonRowPlayerName };
     private int seasonIdIndex;
-    private final List<Integer> seasonIds = new ArrayList<Integer>();
+    private final List<Integer> seasonIds = new ArrayList<>();
     
     protected int getLayoutId() {
         return R.layout.season;

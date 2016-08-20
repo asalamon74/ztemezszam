@@ -1,6 +1,7 @@
 package info.melda.sala.ztemezszam;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,7 @@ public class PlayerActivity extends BaseActivity {
     private static final String[] FROM = { "season_name", "shirt_number" };
     private static final int[] TO = { R.id.playerRowSeasonName, R.id.playerRowShirtNumber };
     private int playerIdIndex;
-    private final List<Integer> playerIds = new ArrayList<Integer>();
+    private final List<Integer> playerIds = new ArrayList<>();
 
     @Override
     public void onCreate( Bundle icicle ) {
@@ -96,16 +97,16 @@ public class PlayerActivity extends BaseActivity {
         if( cursor.moveToFirst() ) {
             playerName = cursor.getString(0);
             playerDob = cursor.getString(1);
-            if( playerDob != null ) {
-                playerDob = " "+playerDob;
-            } else {
+            if( playerDob == null ) {
                 playerDob = "";
             }
         } else {
             playerName = "????";
             playerDob = " ????";
         }
-        titlePlayer.setText(playerName+playerDob);
+        Resources res = getResources();
+        String titlePlayerText=String.format(res.getString(R.string.titlePlayer), playerName, playerDob);
+        titlePlayer.setText(titlePlayerText);
     }
 
      @Override
