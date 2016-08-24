@@ -7,18 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  *
@@ -81,19 +77,12 @@ public class UpdaterService extends Service {
         }
 
         BufferedReader readURL(String fileName) throws IOException {
-            HttpGet httppost = new HttpGet("http://sala.melda.info/mezszam/"+fileName);
-            HttpParams httpParameters = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParameters, 1000 );
-            HttpConnectionParams.setSoTimeout(httpParameters, 2000);
-            DefaultHttpClient httpclient = new DefaultHttpClient( httpParameters);
-            Log.d(TAG, "before execute ");
-            HttpResponse response = httpclient.execute(httppost);
-            HttpEntity ht = response.getEntity();
-            Log.d(TAG, "after execute ");
+            URL url = new URL("http://sala.melda.info/mezszam/"+fileName);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(1000 );
+            urlConnection.setReadTimeout(2000);
 
-            BufferedHttpEntity buf = new BufferedHttpEntity(ht);
-            InputStream is = buf.getContent();
-
+            InputStream is = new BufferedInputStream(urlConnection.getInputStream());
             return new BufferedReader(new InputStreamReader(is));
         }
 
