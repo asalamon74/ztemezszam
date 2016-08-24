@@ -69,6 +69,7 @@ public class PlayerActivity extends BaseActivity {
         while( c.moveToNext() ) {
             playerIds.add( c.getInt(0));
         }
+        c.close();
         playerIdIndex = playerIds.size()-1;
     }
 
@@ -104,6 +105,7 @@ public class PlayerActivity extends BaseActivity {
             playerName = "????";
             playerDob = " ????";
         }
+        cursor.close();
         Resources res = getResources();
         String titlePlayerText=String.format(res.getString(R.string.titlePlayer), playerName, playerDob);
         titlePlayer.setText(titlePlayerText);

@@ -69,6 +69,7 @@ public class ShirtActivity extends BaseActivity {
         while( c.moveToNext() ) {
             shirtNumbers.add( c.getInt(0));
         }
+        c.close();
         shirtNumberIndex = shirtNumbers.size()-1;
     }
 

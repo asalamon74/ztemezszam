@@ -183,6 +183,7 @@ class DbHelper extends SQLiteOpenHelper {
                 return false;
             }
         }
+        currentConf.close();
     }
 
     public void onUpgrade (SQLiteDatabase db, int oldVersion, int newVersion) {
