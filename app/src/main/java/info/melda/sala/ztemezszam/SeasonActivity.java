@@ -42,6 +42,7 @@ public class SeasonActivity extends BaseActivity {
         while( c.moveToNext() ) {
             seasonIds.add( c.getInt(0));
         }
+        c.close();
         seasonIdIndex = seasonIds.size()-1;
     }
 
@@ -81,6 +82,7 @@ public class SeasonActivity extends BaseActivity {
         } else {
             seasonName = "????";
         }
+        seasonNameCursor.close();
         TextView titleSeason = (TextView) findViewById(R.id.titleSeason);
         titleSeason.setText(seasonName);
     }
