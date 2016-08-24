@@ -170,20 +170,22 @@ class DbHelper extends SQLiteOpenHelper {
         int newCsvVersion = Integer.parseInt((String)conf[0]);
 
         Cursor currentConf = db.rawQuery("select csv_version from conf", null);
+        boolean success;
         if( !currentConf.moveToFirst() ) {
             db.execSQL("insert into conf (conf_id, csv_version) values (1, ?)", conf);
-            return true;
+            success = true;
         } else {
             int currentCsvVersion = currentConf.getInt(0);
             if( currentCsvVersion == newCsvVersion ) {
                 db.execSQL("delete from conf");
                 db.execSQL("insert into conf (conf_id, csv_version) values (1, ?)", conf);
-                return true;
+                success = true;
             } else {
-                return false;
+                success = false;
             }
         }
         currentConf.close();
+        return success;
     }
 
     public void onUpgrade (SQLiteDatabase db, int oldVersion, int newVersion) {
