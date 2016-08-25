@@ -84,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     };
 
 
-    private final GestureDetector gestureDetector  = new GestureDetector(simpleOnGestureListener);
+
 
     protected abstract int getLayoutId();
     protected abstract int getListId();
@@ -127,6 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         View swipeView = getWindow().getDecorView();
         Log.d(TAG, "swipView:" + swipeView);
+        final GestureDetector gestureDetector  = new GestureDetector(this, simpleOnGestureListener);
         swipeView.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
