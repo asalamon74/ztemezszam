@@ -6,7 +6,9 @@
     <TextView android:layout_height="wrap_content"
       android:layout_width="wrap_content"
       android:id="@+id/shirtListShirtNumber"
+      android:paddingLeft="0sp"
       android:paddingRight="12sp"
+      android:paddingStart="0sp"
+      android:paddingEnd="0sp"
       android:textSize="30sp"/>
-
 </LinearLayout>
