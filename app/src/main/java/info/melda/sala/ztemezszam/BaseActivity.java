@@ -109,10 +109,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(getLayoutId());
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.zteicon);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(" ZTE Mezszám");
+        if( getSupportActionBar() != null ) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setLogo(R.drawable.zteicon);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setTitle(" ZTE Mezszám");
+        }
         Log.d( TAG, "onCreate");
         Log.d( TAG, "id:"+getListId());
         list = (AbsListView) findViewById( getListId() );
@@ -203,7 +205,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("UpdateReceiver", "onReceived");
-            int result = (Integer)intent.getExtras().get("result");
+            Integer result = (Integer)intent.getExtras().get("result");
+            if( result == null ) {
+                result = UpdaterService.UPDATER_FAIL;
+            }
             switch( result ) {
                 case UpdaterService.UPDATER_FAIL:
                     Toast.makeText( BaseActivity.this, R.string.updateFail, Toast.LENGTH_LONG).show();
