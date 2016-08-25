@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  *
- * @author salamon
  */
 public class SeasonActivity extends BaseActivity {
 

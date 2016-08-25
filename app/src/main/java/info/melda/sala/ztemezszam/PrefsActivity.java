@@ -5,7 +5,6 @@ import android.preference.PreferenceActivity;
 
 /**
  *
- * @author salamon
  */
 public class PrefsActivity extends PreferenceActivity {
 

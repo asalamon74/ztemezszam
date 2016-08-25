@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 /**
  *
- * @author salamon
  */
 public class ZTEMezszamApplication extends Application {
     private static final String TAG = ZTEMezszamApplication.class.getSimpleName();

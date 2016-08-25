@@ -24,7 +24,6 @@ import java.util.StringTokenizer;
 
 /**
  *
- * @author salamon
  */
 class DbHelper extends SQLiteOpenHelper {
 

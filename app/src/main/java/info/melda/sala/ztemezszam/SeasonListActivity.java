@@ -9,7 +9,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 /**
  *
- * @author salamon
  */
 public class SeasonListActivity extends BaseActivity {
 

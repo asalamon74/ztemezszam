@@ -18,7 +18,6 @@ import java.net.URL;
 
 /**
  *
- * @author salamon
  */
 public class UpdaterService extends Service {
 

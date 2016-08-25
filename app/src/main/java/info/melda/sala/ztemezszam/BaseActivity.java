@@ -29,7 +29,6 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  *
- * @author salamon
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";

@@ -13,7 +13,6 @@ import java.util.List;
 
 /**
  *
- * @author salamon
  */
 public class PlayerActivity extends BaseActivity {
 
