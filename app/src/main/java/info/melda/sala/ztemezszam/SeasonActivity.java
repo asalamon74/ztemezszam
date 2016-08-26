@@ -8,9 +8,6 @@ package info.melda.sala.ztemezszam;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,7 @@ import java.util.List;
  */
 public class SeasonActivity extends BaseActivity {
 
-    //private static final String TAG = "SeasonActivity";
+    private static final String TAG = "SeasonActivity";
     private static final String[] FROM = { "shirt_number", "player_name" };
     private static final int[] TO = { R.id.seasonRowShirtNumber, R.id.seasonRowPlayerName };
     private int seasonIdIndex;
@@ -97,22 +94,6 @@ public class SeasonActivity extends BaseActivity {
                 seasonIdIndex = foundSeasonIdIndex;
             }
         }
-
-        list.setOnItemClickListener(new OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                //Log.d(TAG, "click pos"+" "+pos);
-                Intent intent = new Intent(SeasonActivity.this, PlayerActivity.class);
-                Bundle b = new Bundle();
-                int columnIndex =  getCursor().getColumnIndex("player_id");
-                //Log.d( TAG, "columnIndex:"+columnIndex);
-                int playerId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
-                //Log.d( TAG, "playerId:"+playerId);
-                b.putInt("playerId", playerId);
-                intent.putExtras(b);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override

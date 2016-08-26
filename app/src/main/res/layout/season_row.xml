@@ -13,12 +13,14 @@
       android:paddingStart="0sp"
       android:paddingEnd="12sp"
       android:gravity="right"
-      android:textSize="20sp"/>
+      android:textSize="20sp"
+      android:tag="shirt"/>
     <TextView android:layout_height="fill_parent"
       android:layout_width="wrap_content"
       android:layout_weight="1"
       android:gravity="left"
       android:textSize="20sp"
-      android:id="@+id/seasonRowPlayerName" />
+      android:id="@+id/seasonRowPlayerName"
+      android:tag="player" />
 
 </LinearLayout>

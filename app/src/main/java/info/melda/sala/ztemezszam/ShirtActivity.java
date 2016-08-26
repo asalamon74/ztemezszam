@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,22 +32,6 @@ public class ShirtActivity extends BaseActivity {
         }
 
         titleShirt = (TextView) findViewById(R.id.titleShirt);
-
-        list.setOnItemClickListener(new OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                //Log.d(TAG, "click pos"+" "+pos);
-                Intent intent = new Intent(ShirtActivity.this, SeasonActivity.class);
-                Bundle b = new Bundle();
-                int columnIndex =  getCursor().getColumnIndex("season_id");
-                //Log.d( TAG, "columnIndex:"+columnIndex);
-                int seasonId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
-                //Log.d( TAG, "seasonId:"+seasonId);
-                b.putInt("seasonId", seasonId);
-                intent.putExtras(b);
-                startActivity(intent);
-            }
-        });
     }
     
     protected int getLayoutId() {

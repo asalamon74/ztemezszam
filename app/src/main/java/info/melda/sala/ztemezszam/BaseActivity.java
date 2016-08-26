@@ -20,10 +20,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
 
@@ -144,10 +146,43 @@ public abstract class BaseActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
+    private void addClickListener(final TextView view, final int position, final String columnName, final String bundleName, final Class activityClass) {
+        if( view != null ) {
+            view.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d( TAG, "onClick "+view.getText()+" "+position);
+                    int columnIndex =  getCursor().getColumnIndex(columnName);
+                    Log.d( TAG, "columnIndex:"+columnIndex);
+                    int shirtNumber = ((Cursor)adapter.getItem(position)).getInt( columnIndex );
+                    Log.d( TAG, "shirtNumber: "+shirtNumber);
+                    Intent intent = new Intent(BaseActivity.this, activityClass);
+                    Bundle b = new Bundle();
+                    b.putInt(bundleName, shirtNumber);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        adapter = new SimpleCursorAdapter(this, getAdapterLayoutRow(), getCursor(), getAdapterFrom(), getAdapterTo());
+        adapter = new SimpleCursorAdapter(this, getAdapterLayoutRow(), getCursor(), getAdapterFrom(), getAdapterTo()) {
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                Log.d(TAG, "position:"+position+" convertView:"+convertView+" parent:"+parent);
+                 View row = super.getView( position, convertView, parent );
+                 TextView seasonTextView = (TextView)row.findViewWithTag("season");
+                 addClickListener( seasonTextView, position, "season_id", "seasonId", SeasonActivity.class);
+                 TextView shirtTextView = (TextView)row.findViewWithTag("shirt");
+                 addClickListener( shirtTextView, position, "shirt_number", "shirtNumber", ShirtActivity.class);
+                 TextView playerTextView = (TextView)row.findViewWithTag("player");
+                 addClickListener( playerTextView, position, "player_id", "playerId", PlayerActivity.class);
+                return row;
+
+            }
+        };
         Log.d( TAG, "list:"+list);
         // hack to avoid calling AbsListView.setAdapter
         // since it requires API level 11
