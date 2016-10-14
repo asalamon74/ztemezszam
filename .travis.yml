@@ -6,4 +6,4 @@ android:
     - tools
     - build-tools-23.0.3
     - android-23
-    - extra-android-support
+    - extra-android-support-23.4.0
