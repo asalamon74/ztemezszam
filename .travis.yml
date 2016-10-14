@@ -4,6 +4,8 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-23
+    - build-tools-23.0.3
     - android-23
     - extra-android-support
+
+script: ./gradlew tasks
