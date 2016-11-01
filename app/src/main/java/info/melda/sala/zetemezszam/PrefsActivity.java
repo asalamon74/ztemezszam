@@ -1,4 +1,4 @@
-package info.melda.sala.ztemezszam;
+package info.melda.sala.zetemezszam;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package info.melda.sala.ztemezszam;
+package info.melda.sala.zetemezszam;
 
 import android.content.Intent;
 import android.database.Cursor;

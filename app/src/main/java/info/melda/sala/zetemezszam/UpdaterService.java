@@ -1,4 +1,4 @@
-package info.melda.sala.ztemezszam;
+package info.melda.sala.zetemezszam;
 
 import android.app.Service;
 import android.content.Intent;

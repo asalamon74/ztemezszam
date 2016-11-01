@@ -1,4 +1,4 @@
-package info.melda.sala.ztemezszam;
+package info.melda.sala.zetemezszam;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,11 +10,11 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  *
  */
-public class ShirtListActivity extends BaseActivity {
+public class PlayerListActivity extends BaseActivity {
 
-    //private static final String TAG = "ShirtListActivity";
-    private static final String[] FROM = { "shirt_number" };
-    private static final int[] TO = { R.id.shirtListShirtNumber };
+    //private static final String TAG = "PlayerListActivity";
+    private static final String[] FROM = { "player_name" };
+    private static final int[] TO = { R.id.playerListPlayerName };
 
 
     /** Called when the activity is first created. */
@@ -25,13 +25,13 @@ public class ShirtListActivity extends BaseActivity {
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                 //Log.d(TAG, "click pos"+" "+pos);
-                Intent intent = new Intent(ShirtListActivity.this, ShirtActivity.class);
+                Intent intent = new Intent(PlayerListActivity.this, PlayerActivity.class);
                 Bundle b = new Bundle();
-                int columnIndex =  getCursor().getColumnIndex("shirt_number");
+                int columnIndex =  getCursor().getColumnIndex("player_id");
                 //Log.d( TAG, "columnIndex:"+columnIndex);
-                int shirtNumber = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
-                //Log.d( TAG, "shirtNumber:"+shirtNumber);
-                b.putInt("shirtNumber", shirtNumber);
+                int playerId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
+                //Log.d( TAG, "playerId:"+playerId);
+                b.putInt("playerId", playerId);
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -40,17 +40,17 @@ public class ShirtListActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.shirt_grid;
+        return R.layout.player_list;
     }
 
     @Override
     protected int getListId() {
-        return R.id.gridShirtList;
+        return R.id.listPlayerList;
     }
 
     @Override
     protected Cursor getCursor() {
-        return db.rawQuery("select distinct shirt_number _id, shirt_number from shirt order by shirt_number", null);
+        return db.rawQuery("select player_id _id, * from player order by player_name", null);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ShirtListActivity extends BaseActivity {
 
     @Override
     protected int getAdapterLayoutRow() {
-        return R.layout.shirt_grid_row;
+        return R.layout.player_list_row;
     }
 
 }

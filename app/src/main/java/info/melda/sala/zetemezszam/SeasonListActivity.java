@@ -1,4 +1,4 @@
-package info.melda.sala.ztemezszam;
+package info.melda.sala.zetemezszam;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,11 +10,11 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  *
  */
-public class PlayerListActivity extends BaseActivity {
+public class SeasonListActivity extends BaseActivity {
 
-    //private static final String TAG = "PlayerListActivity";
-    private static final String[] FROM = { "player_name" };
-    private static final int[] TO = { R.id.playerListPlayerName };
+    //private static final String TAG = "SeasonListActivity";
+    private static final String[] FROM = { "season_name" };
+    private static final int[] TO = { R.id.seasonListSeasonName };
 
 
     /** Called when the activity is first created. */
@@ -25,13 +25,13 @@ public class PlayerListActivity extends BaseActivity {
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                 //Log.d(TAG, "click pos"+" "+pos);
-                Intent intent = new Intent(PlayerListActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(SeasonListActivity.this, SeasonActivity.class);
                 Bundle b = new Bundle();
-                int columnIndex =  getCursor().getColumnIndex("player_id");
+                int columnIndex =  getCursor().getColumnIndex("season_id");
                 //Log.d( TAG, "columnIndex:"+columnIndex);
-                int playerId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
-                //Log.d( TAG, "playerId:"+playerId);
-                b.putInt("playerId", playerId);
+                int seasonId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
+                //Log.d( TAG, "seasonId:"+seasonId);
+                b.putInt("seasonId", seasonId);
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -40,17 +40,17 @@ public class PlayerListActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.player_list;
+        return R.layout.season_list;
     }
 
     @Override
     protected int getListId() {
-        return R.id.listPlayerList;
+        return R.id.listSeasonList;
     }
 
     @Override
     protected Cursor getCursor() {
-        return db.rawQuery("select player_id _id, * from player order by player_name", null);
+        return db.rawQuery("select season_id _id, * from season order by season_id", null);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class PlayerListActivity extends BaseActivity {
 
     @Override
     protected int getAdapterLayoutRow() {
-        return R.layout.player_list_row;
+        return R.layout.season_list_row;
     }
 
 }
