@@ -10,10 +10,10 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "info.melda.sala.ztemezszam"
+        applicationId "info.melda.sala.zetemezszam"
         minSdkVersion 9
         targetSdkVersion 23
-        project.ext.set("archivesBaseName", "info.melda.sala.ZTEMezszam" );
+        project.ext.set("archivesBaseName", "info.melda.sala.ZeteMezszam" );
     }
 
     buildTypes {

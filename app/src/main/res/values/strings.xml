@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ZTE Mezszám</string>
+    <string name="app_name">Zete Mezszám</string>
     <string name="titlePrefs">Beállítások</string>
     <string name="titleManualSync">Szinkronizálás</string>
     <string name="titleStartSync">Szinkronizálás induláskor</string>

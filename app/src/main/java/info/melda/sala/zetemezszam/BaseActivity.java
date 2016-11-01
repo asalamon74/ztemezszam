@@ -115,7 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setLogo(R.drawable.zteicon);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
-            getSupportActionBar().setTitle(" ZTE Mezszám");
+            getSupportActionBar().setTitle(" "+getResources().getString(R.string.app_name));
         }
         Log.d( TAG, "onCreate");
         Log.d( TAG, "id:"+getListId());
