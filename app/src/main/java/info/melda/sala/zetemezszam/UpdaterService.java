@@ -76,12 +76,13 @@ public class UpdaterService extends Service {
         }
 
         BufferedReader readURL(String fileName) throws IOException {
-            URL url = new URL("http://sala.melda.info/mezszam/"+fileName);
+            URL url = new URL("https://sala.melda.info/mezszam/"+fileName);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(1000 );
             urlConnection.setReadTimeout(2000);
 
             InputStream is = new BufferedInputStream(urlConnection.getInputStream());
+
             return new BufferedReader(new InputStreamReader(is));
         }
 
