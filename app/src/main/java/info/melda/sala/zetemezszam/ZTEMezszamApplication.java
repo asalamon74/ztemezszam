@@ -36,7 +36,7 @@ public class ZTEMezszamApplication extends Application {
         Log.i(TAG, "onTerminated");
     }
 
-    public boolean isStartSync() {
+    private boolean isStartSync() {
         return this.prefs.getBoolean("startsync", false);
     }
     

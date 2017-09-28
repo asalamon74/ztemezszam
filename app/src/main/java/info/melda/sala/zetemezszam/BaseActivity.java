@@ -184,13 +184,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         };
         Log.d( TAG, "list:"+list);
-        // hack to avoid calling AbsListView.setAdapter
-        // since it requires API level 11
-        if( list instanceof ListView ) {
-            ((ListView)list).setAdapter(adapter);
-        } else if( list instanceof GridView ) {
-            ((GridView)list).setAdapter(adapter);
-        }
+        list.setAdapter(adapter);
         registerReceiver(receiver, filter, SEND_ZTEDB_NOTIFICATION, null );
     }
 
