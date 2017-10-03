@@ -31,7 +31,7 @@ public class PlayerActivity extends BaseActivity {
             }
         }
 
-        titlePlayer = (TextView) findViewById(R.id.titlePlayer);
+        titlePlayer = findViewById(R.id.titlePlayer);
     }
     
     protected int getLayoutId() {

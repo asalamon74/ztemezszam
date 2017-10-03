@@ -79,7 +79,7 @@ public class SeasonActivity extends BaseActivity {
             seasonName = "????";
         }
         seasonNameCursor.close();
-        TextView titleSeason = (TextView) findViewById(R.id.titleSeason);
+        TextView titleSeason = findViewById(R.id.titleSeason);
         titleSeason.setText(seasonName);
     }
 

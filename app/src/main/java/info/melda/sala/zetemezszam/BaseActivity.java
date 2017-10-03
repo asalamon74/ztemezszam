@@ -117,7 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         Log.d( TAG, "onCreate");
         Log.d( TAG, "id:"+getListId());
-        list = (AbsListView) findViewById( getListId() );
+        list = findViewById( getListId() );
         Log.d( TAG, "list:"+list);
         // Connect to database
         DbHelper dbHelper = new DbHelper(this);
@@ -171,11 +171,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             public View getView(final int position, View convertView, ViewGroup parent) {
                 Log.d(TAG, "position:"+position+" convertView:"+convertView+" parent:"+parent);
                  View row = super.getView( position, convertView, parent );
-                 TextView seasonTextView = (TextView)row.findViewWithTag("season");
+                 TextView seasonTextView = row.findViewWithTag("season");
                  addClickListener( seasonTextView, position, "season_id", "seasonId", SeasonActivity.class);
-                 TextView shirtTextView = (TextView)row.findViewWithTag("shirt");
+                 TextView shirtTextView = row.findViewWithTag("shirt");
                  addClickListener( shirtTextView, position, "shirt_number", "shirtNumber", ShirtActivity.class);
-                 TextView playerTextView = (TextView)row.findViewWithTag("player");
+                 TextView playerTextView = row.findViewWithTag("player");
                  addClickListener( playerTextView, position, "player_id", "playerId", PlayerActivity.class);
                 return row;
 

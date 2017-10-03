@@ -31,7 +31,7 @@ public class ShirtActivity extends BaseActivity {
             }
         }
 
-        titleShirt = (TextView) findViewById(R.id.titleShirt);
+        titleShirt = findViewById(R.id.titleShirt);
     }
     
     protected int getLayoutId() {
