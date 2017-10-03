@@ -35,10 +35,6 @@
         </activity>
         <activity android:name="info.melda.sala.zetemezszam.PlayerActivity"
                   android:label="@string/app_name">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
         </activity>
         <activity android:name="info.melda.sala.zetemezszam.PrefsActivity"
               android:label="@string/titlePrefs" />
