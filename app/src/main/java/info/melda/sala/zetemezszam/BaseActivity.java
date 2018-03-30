@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package info.melda.sala.zetemezszam;
 
 import android.content.BroadcastReceiver;
@@ -27,9 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- *
- */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     SQLiteDatabase db;
@@ -40,7 +32,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String SEND_ZTEDB_NOTIFICATION = "info.melda.sala.SEND_ZTEDB_UPDATED_NOTIFICATION";
 
     private final SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
-
         
         @Override
         public void onLongPress(MotionEvent e) {
@@ -81,9 +72,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
     };
-
-
-
 
     protected abstract int getLayoutId();
     protected abstract int getListId();
@@ -186,7 +174,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         registerReceiver(receiver, filter, SEND_ZTEDB_NOTIFICATION, null );
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -249,9 +236,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                     Toast.makeText( BaseActivity.this, R.string.updateObsolete, Toast.LENGTH_LONG).show();
                     break;
             }
-            
         }
     }
-
-
 }
