@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package info.melda.sala.zetemezszam;
 
 import android.content.Context;
@@ -22,9 +17,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-/**
- *
- */
 class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
@@ -32,7 +24,6 @@ class DbHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 2;
     private final Context context;
 
-    // Constructor
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
@@ -64,10 +55,6 @@ class DbHelper extends SQLiteOpenHelper {
             reader = new BufferedReader( new InputStreamReader(in_s));
             processConf( db, reader );
 
-            /*String line;
-            while ( (line = reader.readLine()) != null) {
-                Log.d( TAG, "line: "+line);
-            }*/
         } catch ( IOException e ) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -134,12 +121,10 @@ class DbHelper extends SQLiteOpenHelper {
                     Log.e( TAG, "dob parse exception", e);
                     dob = null;
                 }
-                
             }
             player[2] = dob;
             db.execSQL("insert into player (player_id, player_name, player_dob) values (?, ?, ?)", player);
         }
-
     }
 
     static void processSeasons(SQLiteDatabase db, BufferedReader reader) throws IOException {
@@ -157,7 +142,6 @@ class DbHelper extends SQLiteOpenHelper {
     }
 
     static boolean processConf(SQLiteDatabase db, BufferedReader reader) throws IOException {
-
         String line = reader.readLine();
         if( line == null ) {
             return false;
@@ -199,5 +183,4 @@ class DbHelper extends SQLiteOpenHelper {
             upgradeTo++;
         }
     }
-    
 }
