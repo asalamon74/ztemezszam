@@ -179,6 +179,8 @@ class DbHelper extends SQLiteOpenHelper {
                 case 2:
                     db.execSQL("alter table player add column player_dob real");
                     break;
+                default:
+                    throw new IllegalStateException("onUpgrade() with unknown oldVersion" + oldVersion);
             }
             upgradeTo++;
         }
