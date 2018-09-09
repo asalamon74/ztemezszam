@@ -208,6 +208,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             case R.id.itemShirtList:
                 startActivity(new Intent(this, ShirtListActivity.class));
                 break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
