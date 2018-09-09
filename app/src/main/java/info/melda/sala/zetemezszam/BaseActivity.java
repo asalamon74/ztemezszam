@@ -237,6 +237,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 case UpdaterService.UPDATER_OBSOLETE:
                     Toast.makeText( BaseActivity.this, R.string.updateObsolete, Toast.LENGTH_LONG).show();
                     break;
+                default:
+                    Toast.makeText( BaseActivity.this, R.string.updateUnknown, Toast.LENGTH_LONG).show();
             }
         }
     }

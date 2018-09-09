@@ -10,6 +10,7 @@
     <string name="updateFail">Adatbázisfrissítés sikertelen</string>
     <string name="updateObsolete">Elavult programverzió.</string>
     <string name="updateSuccess">Adatbázis frissítve</string>
+    <string name="updateUnknown">Ismeretlen hiba adatbázisfrissítés közben</string>
     <string name="summaryStartSync">Mezszámfrissítés letöltése a program indításakor</string>
     <string name="send_ztedb_updated_notifications_permission_label">Sends ZTEDB Notifications</string>
     <string name="send_ztedb_updated_notifications_permission_description">Allow this application to send ZTEDB
