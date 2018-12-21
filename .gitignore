@@ -2,8 +2,10 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/caches
 .gradle
 /app/build
+/app/release
 /build
 /app/*.apk
 #.gitignore#
