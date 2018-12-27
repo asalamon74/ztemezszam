@@ -1,5 +1,6 @@
 package info.melda.sala.zetemezszam;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class UpdaterService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        this.updater = new Updater();
+        this.updater = new Updater(this);
         this.updater.execute();
         Log.d(TAG, "onStarted");
         return START_STICKY;
@@ -70,16 +72,18 @@ public class UpdaterService extends Service {
     /**
      * Thread that performs the actual update from the online service
      */
-    private class Updater extends AsyncTask<Void,String,Integer> {
+    private static class Updater extends AsyncTask<Void,String,Integer> {
 
         static final String RECEIVE_ZTEDB_NOTIFICATION = "info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION";
 
+        private WeakReference<UpdaterService> updaterServiceReference;
         private final DbHelper dbHelper;
         private final SQLiteDatabase db;
         private Intent intent;
 
-        Updater() {
-            dbHelper = new DbHelper(UpdaterService.this);
+        Updater(UpdaterService updaterService) {
+            this.updaterServiceReference = new WeakReference<>(updaterService);
+            dbHelper = new DbHelper(updaterService);
             db = dbHelper.getWritableDatabase();
         }
 
@@ -175,6 +179,7 @@ public class UpdaterService extends Service {
             return playerIds;
         }
 
+        @SuppressLint("DefaultLocale")
         private String photoURL(int playerId) {
             int playerDir = (int)Math.ceil(0.001 * playerId);
             return String.format(URL_MLSZ_PHOTO_TEMPLATE, playerDir, playerId);
@@ -183,11 +188,11 @@ public class UpdaterService extends Service {
         // Called once the background activity has completed
         @Override
         protected void onPostExecute(Integer result) {
-            UpdaterService updaterService = UpdaterService.this;
             intent = new Intent( DB_UPDATED_INTENT );
             Bundle b = new Bundle();
             b.putInt("result", result);
             intent.putExtras(b);
+            UpdaterService updaterService = updaterServiceReference.get();
             updaterService.sendBroadcast(intent, RECEIVE_ZTEDB_NOTIFICATION);
         }
     }
