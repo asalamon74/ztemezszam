@@ -21,10 +21,11 @@ class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
     private static final String DB_NAME = "ztemezszam.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private final Context context;
+    private static final SimpleDateFormat idf = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
 
-    public DbHelper(Context context) {
+    DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
     }
@@ -34,7 +35,7 @@ class DbHelper extends SQLiteOpenHelper {
         Log.d( TAG, "onCreate" );
         db.execSQL("create table conf ( conf_id int primary key, csv_version int )");
         db.execSQL("create table season ( season_id int primary key, season_name text )");
-        db.execSQL("create table player ( player_id int primary key, player_name text, player_dob real )");
+        db.execSQL("create table player ( player_id int primary key, player_name text, player_dob real, player_mlsz_photo_id int, player_photo blob )");
         db.execSQL("create table shirt ( shirt_id int primary key, player_id int, season_id int, shirt_number int )");
         // read data from resource files
         try {
@@ -99,11 +100,10 @@ class DbHelper extends SQLiteOpenHelper {
         db.execSQL("delete from player");
         String line;
         StringTokenizer st;
-        SimpleDateFormat idf = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);      
         while ((line = reader.readLine()) != null) {
             //Log.d( TAG, "playerline: "+line);
             st = new StringTokenizer(line, ",");            
-            Object[] player = new Object[3];
+            Object[] player = new Object[4];
             player[0] = st.nextToken();
             player[1] = st.nextToken();
             // dob is optional
@@ -111,20 +111,31 @@ class DbHelper extends SQLiteOpenHelper {
             if( st.countTokens() == 0 ) {
                 dob = null;
             } else {
-                try {
-                    Date dobDate = idf.parse(st.nextToken());
-                    GregorianCalendar gc = new GregorianCalendar();
-                    gc.setTime(dobDate);
-                    long millis = gc.getTime().getTime();
-                    dob = getJulianFromUnix ( (int)(millis / 1000) );
-                } catch( ParseException e ) {
-                    Log.e( TAG, "dob parse exception", e);
-                    dob = null;
-                }
+                dob = getDateOfBirth(st.nextToken());
             }
             player[2] = dob;
-            db.execSQL("insert into player (player_id, player_name, player_dob) values (?, ?, ?)", player);
+            String mlszPhotoId = null;
+            if (st.countTokens() > 0) {
+                mlszPhotoId = st.nextToken();
+            }
+            player[3] = mlszPhotoId;
+            db.execSQL("insert into player (player_id, player_name, player_dob, player_mlsz_photo_id) values (?, ?, ?, ?)", player);
         }
+    }
+
+    private static Double getDateOfBirth(String token) {
+        Double dob;
+        try {
+            Date dobDate = idf.parse(token);
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(dobDate);
+            long millis = gc.getTime().getTime();
+            dob = getJulianFromUnix ( (int)(millis / 1000) );
+        } catch( ParseException e ) {
+            Log.e( TAG, "dob parse exception", e);
+            dob = null;
+        }
+        return dob;
     }
 
     static void processSeasons(SQLiteDatabase db, BufferedReader reader) throws IOException {
@@ -179,6 +190,9 @@ class DbHelper extends SQLiteOpenHelper {
                 case 2:
                     db.execSQL("alter table player add column player_dob real");
                     break;
+                case 3:
+                    db.execSQL("alter table player add column player_mlsz_photo_id int");
+                    db.execSQL("alter table player add column player_photo blob");
                 default:
                     throw new IllegalStateException("onUpgrade() with unknown oldVersion" + oldVersion);
             }

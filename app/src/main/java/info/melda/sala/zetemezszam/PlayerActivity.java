@@ -3,7 +3,12 @@ package info.melda.sala.zetemezszam;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +18,10 @@ import java.util.List;
  */
 public class PlayerActivity extends BaseActivity {
 
-    //private static final String TAG = "PlayerActivity";
+    private static final String TAG = "PlayerActivity";
     private TextView titlePlayer;
+    private TextView dobPlayer;
+    private ImageView photoPlayer;
     private static final String[] FROM = { "season_name", "shirt_number" };
     private static final int[] TO = { R.id.playerRowSeasonName, R.id.playerRowShirtNumber };
     private int playerIdIndex;
@@ -32,6 +39,8 @@ public class PlayerActivity extends BaseActivity {
         }
 
         titlePlayer = findViewById(R.id.titlePlayer);
+        dobPlayer = findViewById(R.id.dobPlayer);
+        photoPlayer = findViewById(R.id.photoPlayer);
     }
     
     protected int getLayoutId() {
@@ -72,26 +81,44 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = db.rawQuery("select player_name, strftime('%Y.%m.%d.',player_dob) from player where player_id="+playerIds.get(playerIdIndex), null);
+        Cursor cursor = db.rawQuery("select player_name, strftime('%Y.%m.%d.',player_dob), player_photo from player where player_id="+playerIds.get(playerIdIndex), null);
         String playerName;
         String playerDob;
+        Bitmap playerImageBitmap;
         if( cursor.moveToFirst() ) {
             playerName = cursor.getString(0);
             playerDob = cursor.getString(1);
             if( playerDob == null ) {
                 playerDob = "";
             }
+            byte []playerImageByteArray = cursor.getBlob(2);
+            if (playerImageByteArray != null) {
+                Log.v(TAG, "DB image size"+playerImageByteArray.length);
+                playerImageBitmap = convertByteArrayToBitmap(playerImageByteArray);
+            } else {
+                Log.v(TAG, "null image");
+                playerImageBitmap = null;
+            }
         } else {
             playerName = "????";
             playerDob = " ????";
+            playerImageBitmap = null;
         }
         cursor.close();
         Resources res = getResources();
         String titlePlayerText=String.format(res.getString(R.string.titlePlayer), playerName, playerDob);
-        titlePlayer.setText(titlePlayerText);
+        titlePlayer.setText(playerName);
+        dobPlayer.setText(playerDob);
+        if (playerImageBitmap != null) {
+            photoPlayer.setImageBitmap(playerImageBitmap);
+        }
+        }
+
+    public static Bitmap convertByteArrayToBitmap(byte[] byteArray) {
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
 
-     @Override
+    @Override
     protected void swipeRightAction() {
         if( playerIdIndex > 0 ) {
             --playerIdIndex;
