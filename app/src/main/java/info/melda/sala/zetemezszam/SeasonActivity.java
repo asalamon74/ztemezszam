@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class SeasonActivity extends BaseActivity {
 
-    private static final String TAG = "SeasonActivity";
+    //private static final String TAG = "SeasonActivity";
     private static final String[] FROM = { "shirt_number", "player_name" };
     private static final int[] TO = { R.id.seasonRowShirtNumber, R.id.seasonRowPlayerName };
     private int seasonIdIndex;

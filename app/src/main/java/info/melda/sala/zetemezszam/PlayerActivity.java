@@ -1,11 +1,9 @@
 package info.melda.sala.zetemezszam;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -105,14 +103,12 @@ public class PlayerActivity extends BaseActivity {
             playerImageBitmap = null;
         }
         cursor.close();
-        Resources res = getResources();
-        String titlePlayerText=String.format(res.getString(R.string.titlePlayer), playerName, playerDob);
         titlePlayer.setText(playerName);
         dobPlayer.setText(playerDob);
         if (playerImageBitmap != null) {
             photoPlayer.setImageBitmap(playerImageBitmap);
         }
-        }
+    }
 
     public static Bitmap convertByteArrayToBitmap(byte[] byteArray) {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
