@@ -171,11 +171,17 @@ public class UpdaterService extends Service {
 
         private List<Integer> getPlayersWithMissingPhoto(SQLiteDatabase db) {
             List<Integer> playerIds = new ArrayList<>();
-            Cursor c = db.rawQuery("select player_mlsz_photo_id from player where player_photo is null and player_mlsz_photo_id is not null", null);
-            while (c.moveToNext()) {
-                playerIds.add(c.getInt(0));
+            Cursor cursor = db.rawQuery("select player_mlsz_photo_id, player_photo from player where player_photo is null and player_mlsz_photo_id is not null", null);
+            while (cursor.moveToNext()) {
+                Log.v(TAG, "Checking "+cursor.getInt(0));
+                // player_photo is null is not enough
+                byte[] playerImageByteArray = cursor.getBlob(1);
+                if (playerImageByteArray == null) {
+                    Log.v(TAG, "photo is null");
+                    playerIds.add(cursor.getInt(0));
+                }
             }
-            c.close();
+            cursor.close();
             return playerIds;
         }
 

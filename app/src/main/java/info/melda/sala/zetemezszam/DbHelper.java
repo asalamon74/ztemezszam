@@ -14,7 +14,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 class DbHelper extends SQLiteOpenHelper {
@@ -97,28 +99,85 @@ class DbHelper extends SQLiteOpenHelper {
     }
 
     static void processPlayers(SQLiteDatabase db, BufferedReader reader) throws IOException {
-        db.execSQL("delete from player");
+        //db.execSQL("delete from player");
         String line;
         StringTokenizer st;
+        Set<Integer> unprocessedIds = getAllPlayerIds(db);
         while ((line = reader.readLine()) != null) {
-            //Log.d( TAG, "playerline: "+line);
+            // Log.d( TAG, "playerline: "+line);
             st = new StringTokenizer(line, ",");            
-            Object[] player = new Object[4];
-            player[0] = st.nextToken();
-            player[1] = st.nextToken();
-            // dob is optional
-            Double dob;
+            String playerId = st.nextToken();
+            String playerName = st.nextToken();
+            // dob and mlsz_photo_id are optional
+            Double playerDob;
             if( st.countTokens() == 0 ) {
-                dob = null;
+                playerDob = null;
             } else {
-                dob = getDateOfBirth(st.nextToken());
+                playerDob = getDateOfBirth(st.nextToken());
             }
-            player[2] = dob;
-            String mlszPhotoId = null;
+            String playerMlszPhotoId = null;
             if (st.countTokens() > 0) {
-                mlszPhotoId = st.nextToken();
+                playerMlszPhotoId = st.nextToken();
             }
-            player[3] = mlszPhotoId;
+            mergeInto(db, playerId, playerName, playerDob, playerMlszPhotoId);
+            unprocessedIds.remove(Integer.parseInt(playerId));
+        }
+        deletePlayersDefinedByIds(db, unprocessedIds);
+    }
+
+    private static void deletePlayersDefinedByIds(SQLiteDatabase db, Set<Integer> unprocessedIds) {
+        for (Integer playerId : unprocessedIds) {
+            db.execSQL("delete from player where player_id = ?", new Object[]{playerId});
+        }
+    }
+
+    private static Set<Integer> getAllPlayerIds(SQLiteDatabase db) {
+        Set<Integer> allIds = new HashSet<>();
+        Cursor cursor = db.rawQuery("select player_id from player", null);
+        while (cursor.moveToNext()) {
+            allIds.add(cursor.getInt(0));
+        }
+        cursor.close();
+        return allIds;
+    }
+
+    private static void mergeInto(SQLiteDatabase db, String playerId, String playerName, Double playerDob, String playerMlszPhotoId) {
+        Cursor cursor = db.rawQuery("select player_id, player_photo, player_mlsz_photo_id from player where player_id = ?", new String[]{playerId});
+        boolean hasPlayerInfo = cursor.moveToNext();
+        boolean hasPhoto;
+        int oldPlayerMlszPhotoId;
+        if (hasPlayerInfo) {
+            hasPhoto = cursor.getBlob(1) != null;
+            oldPlayerMlszPhotoId = cursor.getInt(2);
+        } else {
+            hasPhoto = false;
+            oldPlayerMlszPhotoId = 0;
+        }
+        cursor.close();
+        Object[] player = new Object[4];
+        if (hasPlayerInfo) {
+            boolean noLongerHasMlszPhotoId = oldPlayerMlszPhotoId > 0 && playerMlszPhotoId != null;
+            int newPlayerMlszPhotoId = playerMlszPhotoId == null ? 0 : Integer.parseInt(playerMlszPhotoId);
+            boolean changedMlszPhotoId = oldPlayerMlszPhotoId != newPlayerMlszPhotoId;
+            boolean needToDeletePhoto = hasPhoto && (noLongerHasMlszPhotoId || changedMlszPhotoId);
+            if (needToDeletePhoto) {
+                player[0] = playerName;
+                player[1] = playerDob;
+                player[2] = playerMlszPhotoId;
+                player[3] = playerId;
+                db.execSQL("update player set player_name = ?, player_dob = ?, player_mlsz_photo_id = ?, player_photo = null where player_id = ?");
+            } else {
+                player[0] = playerName;
+                player[1] = playerDob;
+                player[2] = playerMlszPhotoId;
+                player[3] = playerId;
+                db.execSQL("update player set player_name = ?, player_dob = ?, player_mlsz_photo_id = ? where player_id = ?");
+            }
+        } else {
+            player[0] = playerId;
+            player[1] = playerName;
+            player[2] = playerDob;
+            player[3] = playerMlszPhotoId;
             db.execSQL("insert into player (player_id, player_name, player_dob, player_mlsz_photo_id) values (?, ?, ?, ?)", player);
         }
     }
