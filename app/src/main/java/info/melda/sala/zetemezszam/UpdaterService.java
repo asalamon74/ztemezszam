@@ -76,7 +76,7 @@ public class UpdaterService extends Service {
 
         static final String RECEIVE_ZTEDB_NOTIFICATION = "info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION";
 
-        private WeakReference<UpdaterService> updaterServiceReference;
+        private final WeakReference<UpdaterService> updaterServiceReference;
         private final DbHelper dbHelper;
         private final SQLiteDatabase db;
         private Intent intent;

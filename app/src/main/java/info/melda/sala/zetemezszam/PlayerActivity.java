@@ -110,7 +110,7 @@ public class PlayerActivity extends BaseActivity {
         }
     }
 
-    public static Bitmap convertByteArrayToBitmap(byte[] byteArray) {
+    private static Bitmap convertByteArrayToBitmap(byte[] byteArray) {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
 

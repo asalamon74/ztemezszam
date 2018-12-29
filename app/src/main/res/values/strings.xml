@@ -12,11 +12,11 @@
     <string name="updateSuccess">Adatbázis frissítve</string>
     <string name="updateUnknown">Ismeretlen hiba adatbázisfrissítés közben</string>
     <string name="summaryStartSync">Mezszámfrissítés letöltése a program indításakor</string>
+    <string name="playerPhoto">Játékos fényképe</string>
     <string name="send_ztedb_updated_notifications_permission_label">Sends ZTEDB Notifications</string>
     <string name="send_ztedb_updated_notifications_permission_description">Allow this application to send ZTEDB
     notifications to other applications</string>
     <string name="receive_ztedb_updated_notifications_permission_label">Receive ZTEDB Notifications</string>
     <string name="receive_ztedb_updated_notifications_permission_description">Allow this application to receive ZTEDB
     notifications from other applications</string>
-    <string name="titlePlayer">%1$s %2$s</string>
 </resources>
