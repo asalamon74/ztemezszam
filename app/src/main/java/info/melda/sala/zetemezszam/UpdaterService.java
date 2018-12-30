@@ -170,8 +170,9 @@ public class UpdaterService extends Service {
         }
 
         private List<Integer> getPlayersWithMissingPhoto(SQLiteDatabase db) {
+            Log.v(TAG, "Getting list of players with missing photo");
             List<Integer> playerIds = new ArrayList<>();
-            Cursor cursor = db.rawQuery("select player_mlsz_photo_id, player_photo from player where player_photo is null and player_mlsz_photo_id is not null", null);
+            Cursor cursor = db.rawQuery("select player_mlsz_photo_id, player_photo from player where player_photo is null and coalesce(player_mlsz_photo_id,0) != 0", null);
             while (cursor.moveToNext()) {
                 Log.v(TAG, "Checking "+cursor.getInt(0));
                 // player_photo is null is not enough
@@ -182,6 +183,7 @@ public class UpdaterService extends Service {
                 }
             }
             cursor.close();
+            Log.v(TAG, String.format("Found %d players with missing photo", playerIds.size()));
             return playerIds;
         }
 
