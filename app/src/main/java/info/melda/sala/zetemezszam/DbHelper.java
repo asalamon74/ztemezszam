@@ -255,6 +255,7 @@ class DbHelper extends SQLiteOpenHelper {
                 case 3:
                     db.execSQL("alter table player add column player_mlsz_photo_id int");
                     db.execSQL("alter table player add column player_photo blob");
+                    break;
                 default:
                     throw new IllegalStateException("onUpgrade() with unknown oldVersion" + oldVersion);
             }
