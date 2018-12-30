@@ -1,5 +1,6 @@
 package info.melda.sala.zetemezszam;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -35,34 +36,40 @@ class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d( TAG, "onCreate" );
-        db.execSQL("create table conf ( conf_id int primary key, csv_version int )");
-        db.execSQL("create table season ( season_id int primary key, season_name text )");
-        db.execSQL("create table player ( player_id int primary key, player_name text, player_dob real, player_mlsz_photo_id int, player_photo blob )");
-        db.execSQL("create table shirt ( shirt_id int primary key, player_id int, season_id int, shirt_number int )");
-        // read data from resource files
+        createDBTables(db);
         try {
-            Resources res = context.getResources();
-            InputStream in_s = res.openRawResource(R.raw.shirts);
-            BufferedReader reader = new BufferedReader( new InputStreamReader(in_s));
-            processShirts( db, reader );
-
-            in_s = res.openRawResource(R.raw.seasons);
-            reader = new BufferedReader( new InputStreamReader(in_s));
-            processSeasons( db, reader );
-
-            in_s = res.openRawResource(R.raw.players);
-            reader = new BufferedReader( new InputStreamReader(in_s));
-            processPlayers( db, reader );
-
-            in_s = res.openRawResource(R.raw.conf);
-            reader = new BufferedReader( new InputStreamReader(in_s));
-            processConf( db, reader );
-
+            readDataFromResourceFiles(db);
         } catch ( IOException e ) {
             Log.e(TAG, e.getMessage(), e);
         }
     }
-        
+
+    private void createDBTables(SQLiteDatabase db) {
+        db.execSQL("create table conf ( conf_id int primary key, csv_version int )");
+        db.execSQL("create table season ( season_id int primary key, season_name text )");
+        db.execSQL("create table player ( player_id int primary key, player_name text, player_dob real, player_mlsz_photo_id int, player_photo blob )");
+        db.execSQL("create table shirt ( shirt_id int primary key, player_id int, season_id int, shirt_number int )");
+    }
+
+    private void readDataFromResourceFiles(SQLiteDatabase db) throws IOException {
+        Resources res = context.getResources();
+        InputStream in_s = res.openRawResource(R.raw.shirts);
+        BufferedReader reader = new BufferedReader( new InputStreamReader(in_s));
+        processShirts( db, reader );
+
+        in_s = res.openRawResource(R.raw.seasons);
+        reader = new BufferedReader( new InputStreamReader(in_s));
+        processSeasons( db, reader );
+
+        in_s = res.openRawResource(R.raw.players);
+        reader = new BufferedReader( new InputStreamReader(in_s));
+        processPlayers( db, reader );
+
+        in_s = res.openRawResource(R.raw.conf);
+        reader = new BufferedReader( new InputStreamReader(in_s));
+        processConf( db, reader );
+    }
+
     static void processShirts(SQLiteDatabase db, BufferedReader reader) throws IOException {
         db.execSQL("delete from shirt");
         String line;
@@ -142,43 +149,41 @@ class DbHelper extends SQLiteOpenHelper {
     }
 
     private static void mergeInto(SQLiteDatabase db, String playerId, String playerName, Double playerDob, String playerMlszPhotoId) {
-        Cursor cursor = db.rawQuery("select player_id, player_photo, player_mlsz_photo_id from player where player_id = ?", new String[]{playerId});
+        Log.v(TAG, "Saving data for: "+playerName+" "+playerId+" "+playerDob+" "+playerMlszPhotoId);
+        Cursor cursor = db.rawQuery("select player_photo, player_mlsz_photo_id from player where player_id = ?", new String[]{playerId});
         boolean hasPlayerInfo = cursor.moveToNext();
         boolean hasPhoto;
         int oldPlayerMlszPhotoId;
         if (hasPlayerInfo) {
-            hasPhoto = cursor.getBlob(1) != null;
-            oldPlayerMlszPhotoId = cursor.getInt(2);
+            hasPhoto = cursor.getBlob(0) != null;
+            oldPlayerMlszPhotoId = cursor.getInt(1);
         } else {
             hasPhoto = false;
             oldPlayerMlszPhotoId = 0;
         }
         cursor.close();
-        Object[] player = new Object[4];
+        ContentValues cv = new ContentValues();
+        cv.put("player_name", playerName);
+        cv.put("player_dob", playerDob);
+        cv.put("player_mlsz_photo_id", playerMlszPhotoId);
         if (hasPlayerInfo) {
-            boolean noLongerHasMlszPhotoId = oldPlayerMlszPhotoId > 0 && playerMlszPhotoId != null;
+            boolean noLongerHasMlszPhotoId = oldPlayerMlszPhotoId > 0 && playerMlszPhotoId == null;
             int newPlayerMlszPhotoId = playerMlszPhotoId == null ? 0 : Integer.parseInt(playerMlszPhotoId);
             boolean changedMlszPhotoId = oldPlayerMlszPhotoId != newPlayerMlszPhotoId;
             boolean needToDeletePhoto = hasPhoto && (noLongerHasMlszPhotoId || changedMlszPhotoId);
+            Log.v(TAG, "hasPhoto: "+hasPhoto+" noLongerHasMlszPhotoId: "+noLongerHasMlszPhotoId+" changedMlszPhotoId: "+changedMlszPhotoId);
             if (needToDeletePhoto) {
-                player[0] = playerName;
-                player[1] = playerDob;
-                player[2] = playerMlszPhotoId;
-                player[3] = playerId;
-                db.execSQL("update player set player_name = ?, player_dob = ?, player_mlsz_photo_id = ?, player_photo = null where player_id = ?");
+                Log.v(TAG, "calling update with cleaning the photo");
+                cv.putNull("player_photo");
+                db.update("player", cv, "player_id = ?", new String[]{ playerId });
             } else {
-                player[0] = playerName;
-                player[1] = playerDob;
-                player[2] = playerMlszPhotoId;
-                player[3] = playerId;
-                db.execSQL("update player set player_name = ?, player_dob = ?, player_mlsz_photo_id = ? where player_id = ?");
+                Log.v(TAG, "calling update without cleaning the photo");
+                db.update("player", cv, "player_id = ?", new String[]{ playerId });
             }
         } else {
-            player[0] = playerId;
-            player[1] = playerName;
-            player[2] = playerDob;
-            player[3] = playerMlszPhotoId;
-            db.execSQL("insert into player (player_id, player_name, player_dob, player_mlsz_photo_id) values (?, ?, ?, ?)", player);
+            cv.put("player_id", playerId);
+            Log.v(TAG, "calling insert into");
+            db.insert("player", null, cv);
         }
     }
 
@@ -230,8 +235,6 @@ class DbHelper extends SQLiteOpenHelper {
         } else {
             int currentCsvVersion = currentConf.getInt(0);
             if( currentCsvVersion == newCsvVersion ) {
-                db.execSQL("delete from conf");
-                db.execSQL("insert into conf (conf_id, csv_version) values (1, ?)", conf);
                 success = true;
             } else {
                 success = false;
