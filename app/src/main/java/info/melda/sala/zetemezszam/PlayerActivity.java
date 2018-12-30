@@ -22,25 +22,34 @@ public class PlayerActivity extends BaseActivity {
     private ImageView photoPlayer;
     private static final String[] FROM = { "season_name", "shirt_number" };
     private static final int[] TO = { R.id.playerRowSeasonName, R.id.playerRowShirtNumber };
+    private int playerId;
     private int playerIdIndex;
     private final List<Integer> playerIds = new ArrayList<>();
 
     @Override
     public void onCreate( Bundle icicle ) {
+        Log.d(TAG, "onCreate "+icicle);
         super.onCreate( icicle );
-        Bundle b = getIntent().getExtras();
-        if( b != null ) {
-            int foundPlayerIdIndex = playerIds.indexOf(b.getInt("playerId"));
-            if( foundPlayerIdIndex != -1 ) {
-                playerIdIndex = foundPlayerIdIndex;
-            }
-        }
-
+        findPlayerByBundle( icicle );
         titlePlayer = findViewById(R.id.titlePlayer);
         dobPlayer = findViewById(R.id.dobPlayer);
         photoPlayer = findViewById(R.id.photoPlayer);
     }
-    
+
+    private void findPlayerByBundle(Bundle b) {
+        if( b != null ) {
+            playerId = b.getInt(BUNDLE_KEY_PLAYER_ID);
+            findPlayerIdIndex();
+        }
+    }
+
+    private void findPlayerIdIndex() {
+        int foundPlayerIdIndex = playerIds.indexOf(playerId);
+        if( foundPlayerIdIndex != -1 ) {
+            playerIdIndex = foundPlayerIdIndex;
+        }
+    }
+
     protected int getLayoutId() {
         return R.layout.player;
     }
@@ -51,13 +60,20 @@ public class PlayerActivity extends BaseActivity {
 
     @Override
     protected void initDB() {
+        Log.d(TAG, "initDB "+playerIdIndex+" "+playerId);
         Cursor c = db.rawQuery("select player_id from player order by player_name", null);
         playerIds.clear();
         while( c.moveToNext() ) {
             playerIds.add( c.getInt(0));
         }
         c.close();
-        playerIdIndex = playerIds.size()-1;
+        Log.d(TAG, "playerNum:"+playerIds.size());
+        Bundle bundle = getIntent().getExtras();
+        Log.d(TAG, "bundle: "+bundle);
+        if (playerId == 0) {
+            findPlayerByBundle(bundle);
+        }
+        Log.d(TAG, "playerIdIndex:"+playerIdIndex);
     }
 
     protected Cursor getCursor() {
@@ -79,7 +95,8 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = db.rawQuery("select player_name, strftime('%Y.%m.%d.',player_dob), player_photo from player where player_id="+playerIds.get(playerIdIndex), null);
+        Log.d(TAG, "onResume "+playerIdIndex+" "+playerId);
+        Cursor cursor = db.rawQuery("select player_name, strftime('%Y.%m.%d.',player_dob), player_photo from player where player_id="+playerId, null);
         String playerName;
         String playerDob;
         Bitmap playerImageBitmap;
@@ -105,9 +122,7 @@ public class PlayerActivity extends BaseActivity {
         cursor.close();
         titlePlayer.setText(playerName);
         dobPlayer.setText(playerDob);
-        if (playerImageBitmap != null) {
-            photoPlayer.setImageBitmap(playerImageBitmap);
-        }
+        photoPlayer.setImageBitmap(playerImageBitmap);
     }
 
     private static Bitmap convertByteArrayToBitmap(byte[] byteArray) {
@@ -118,6 +133,7 @@ public class PlayerActivity extends BaseActivity {
     protected void swipeRightAction() {
         if( playerIdIndex > 0 ) {
             --playerIdIndex;
+            playerId = playerIds.get(playerIdIndex);
         }
         onResume();
     }
@@ -126,6 +142,7 @@ public class PlayerActivity extends BaseActivity {
     protected void swipeLeftAction() {
         if( playerIdIndex < playerIds.size()-1 ) {
             ++playerIdIndex;
+            playerId = playerIds.get(playerIdIndex);
         }
         onResume();
     }
@@ -133,5 +150,12 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void longPressAction() {
         startActivity( new Intent( this, PlayerListActivity.class) );
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        Log.d(TAG, "onSaveInstanceState "+playerId);
+        super.onSaveInstanceState(state);
+        state.putInt(BUNDLE_KEY_PLAYER_ID, playerId);
     }
 }

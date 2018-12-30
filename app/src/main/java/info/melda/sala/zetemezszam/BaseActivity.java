@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
+    public static final String BUNDLE_KEY_PLAYER_ID = "playerId";
     SQLiteDatabase db;
     private UpdateReceiver receiver;
     private IntentFilter filter;
@@ -163,7 +164,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 TextView shirtTextView = row.findViewWithTag("shirt");
                 addClickListener( shirtTextView, position, "shirt_number", "shirtNumber", ShirtActivity.class);
                 TextView playerTextView = row.findViewWithTag("player");
-                addClickListener( playerTextView, position, "player_id", "playerId", PlayerActivity.class);
+                addClickListener( playerTextView, position, "player_id", BUNDLE_KEY_PLAYER_ID, PlayerActivity.class);
                 return row;
 
             }

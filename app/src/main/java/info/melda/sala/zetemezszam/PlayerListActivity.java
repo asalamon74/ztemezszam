@@ -31,7 +31,7 @@ public class PlayerListActivity extends BaseActivity {
                 //Log.d( TAG, "columnIndex:"+columnIndex);
                 int playerId = ((Cursor)adapter.getItem(pos)).getInt( columnIndex );
                 //Log.d( TAG, "playerId:"+playerId);
-                b.putInt("playerId", playerId);
+                b.putInt(BUNDLE_KEY_PLAYER_ID, playerId);
                 intent.putExtras(b);
                 startActivity(intent);
             }
