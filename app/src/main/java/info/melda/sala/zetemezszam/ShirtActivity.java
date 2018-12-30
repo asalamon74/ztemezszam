@@ -74,7 +74,6 @@ public class ShirtActivity extends BaseActivity {
         super.onResume();
         Log.d( TAG, "shirtNumberIndex:"+shirtNumberIndex);
         Log.d( TAG, "shirtNumbers:"+shirtNumbers);
-        //titleShirt.setText("AA");
         titleShirt.setText( String.valueOf(shirtNumbers.get( shirtNumberIndex )));
     }
 

@@ -23,6 +23,7 @@ import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    protected static final String UNKNOWN = "????";
     private static final String TAG = "BaseActivity";
     public static final String BUNDLE_KEY_PLAYER_ID = "playerId";
     SQLiteDatabase db;

@@ -76,7 +76,7 @@ public class SeasonActivity extends BaseActivity {
         if( seasonNameCursor.moveToFirst() ) {
             seasonName = seasonNameCursor.getString(0);
         } else {
-            seasonName = "????";
+            seasonName = UNKNOWN;
         }
         seasonNameCursor.close();
         TextView titleSeason = findViewById(R.id.titleSeason);

@@ -115,8 +115,8 @@ public class PlayerActivity extends BaseActivity {
                 playerImageBitmap = null;
             }
         } else {
-            playerName = "????";
-            playerDob = " ????";
+            playerName = UNKNOWN;
+            playerDob = UNKNOWN;
             playerImageBitmap = null;
         }
         cursor.close();
