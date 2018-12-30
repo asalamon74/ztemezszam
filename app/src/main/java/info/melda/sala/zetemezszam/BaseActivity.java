@@ -81,7 +81,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getAdapterLayoutRow();
 
     void initDB() {
-        // basic implementation does nothing
     }
 
     void swipeRightAction() {
@@ -158,13 +157,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 Log.d(TAG, "position:"+position+" convertView:"+convertView+" parent:"+parent);
-                 View row = super.getView( position, convertView, parent );
-                 TextView seasonTextView = row.findViewWithTag("season");
-                 addClickListener( seasonTextView, position, "season_id", "seasonId", SeasonActivity.class);
-                 TextView shirtTextView = row.findViewWithTag("shirt");
-                 addClickListener( shirtTextView, position, "shirt_number", "shirtNumber", ShirtActivity.class);
-                 TextView playerTextView = row.findViewWithTag("player");
-                 addClickListener( playerTextView, position, "player_id", "playerId", PlayerActivity.class);
+                View row = super.getView( position, convertView, parent );
+                TextView seasonTextView = row.findViewWithTag("season");
+                addClickListener( seasonTextView, position, "season_id", "seasonId", SeasonActivity.class);
+                TextView shirtTextView = row.findViewWithTag("shirt");
+                addClickListener( shirtTextView, position, "shirt_number", "shirtNumber", ShirtActivity.class);
+                TextView playerTextView = row.findViewWithTag("player");
+                addClickListener( playerTextView, position, "player_id", "playerId", PlayerActivity.class);
                 return row;
 
             }
