@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -115,16 +116,20 @@ public class UpdaterService extends Service {
 
         protected Integer doInBackground(Void... params) {
             Log.d(TAG, "Updater running");
+            BufferedReader confReader = null;
+            BufferedReader seasonsReader = null;
+            BufferedReader playersReader = null;
+            BufferedReader shirtsReader = null;
             try {
-                BufferedReader r = readURL("conf.csv");
+                confReader = readURL("conf.csv");
                 db.beginTransaction();
-                if( DbHelper.processConf(db, r) ) {
-                    r = readURL("seasons.csv");
-                    DbHelper.processSeasons(db, r);
-                    r = readURL("players.csv");
-                    DbHelper.processPlayers( db, r );
-                    r = readURL("shirts.csv");
-                    DbHelper.processShirts( db, r );
+                if( DbHelper.processConf(db, confReader) ) {
+                    seasonsReader = readURL("seasons.csv");
+                    DbHelper.processSeasons(db, seasonsReader);
+                    playersReader = readURL("players.csv");
+                    DbHelper.processPlayers( db, playersReader );
+                    shirtsReader = readURL("shirts.csv");
+                    DbHelper.processShirts( db, shirtsReader );
                     updatePhotos(db);
                     db.setTransactionSuccessful();
                     db.endTransaction();
@@ -138,7 +143,21 @@ public class UpdaterService extends Service {
                 Log.d(TAG, e.getMessage(), e);
                 return UPDATER_FAIL;
             } finally {
+                closeReader(confReader);
+                closeReader(seasonsReader);
+                closeReader(playersReader);
+                closeReader(shirtsReader);
                 Log.d(TAG, "Updater ran");
+            }
+        }
+
+        private void closeReader(Reader reader) {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Cannot close reader", e);
+                }
             }
         }
 
