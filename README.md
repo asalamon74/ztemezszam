@@ -1,5 +1,6 @@
-[![Build
-Status](https://travis-ci.org/asalamon74/ztemezszam.svg?branch=master)](https://travis-ci.org/asalamon74/ztemezszam) [![GitHub release](https://img.shields.io/github/release/asalamon74/ztemezszam.svg)](https://github.com/asalamon74/ztemezszam/releases)
+[![Build Status](https://travis-ci.org/asalamon74/ztemezszam.svg?branch=master)](https://travis-ci.org/asalamon74/ztemezszam)
+[![CodeFactor](https://www.codefactor.io/repository/github/asalamon74/ztemezszam/badge)](https://www.codefactor.io/repository/github/asalamon74/ztemezszam)
+[![GitHub release](https://img.shields.io/github/release/asalamon74/ztemezszam.svg)](https://github.com/asalamon74/ztemezszam/releases)
 
 ZTE squad number database.
 
