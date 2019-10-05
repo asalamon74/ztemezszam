@@ -5,3 +5,5 @@
 ZTE squad number database.
 
 You can download the program from [Google Play Store](https://play.google.com/store/apps/details?id=info.melda.sala.zetemezszam).
+
+Online version of the database can be found [here](https://sala.melda.info/mezszam/).
