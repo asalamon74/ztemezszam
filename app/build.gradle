@@ -18,7 +18,7 @@ android {
 
     signingConfigs {
         release {
-            def RELEASE_STORE_FILE=project.properties['RELEASE_STORE_PASSWORD'] ?: "release.keystore"
+            def RELEASE_STORE_FILE=project.properties['RELEASE_STORE_FILE'] ?: "release.keystore"
             storeFile file(RELEASE_STORE_FILE)
             def RELEASE_STORE_PASSWORD=project.properties['RELEASE_STORE_PASSWORD'] ?: ""
             storePassword RELEASE_STORE_PASSWORD
