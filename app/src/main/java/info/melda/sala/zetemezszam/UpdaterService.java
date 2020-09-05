@@ -38,7 +38,7 @@ public class UpdaterService extends Service {
 
     public static final String DB_UPDATED_INTENT = "info.melda.sala.DB_UPDATED";
     private static final String URL_PLAYERINFO = "https://sala.melda.info/mezszam/";
-    private static final String URL_MLSZ_PHOTO_TEMPLATE = "http://adatbank.mlsz.hu/img/SzemelyFoto/Foto/%d/%d.jpg";
+    private static final String URL_MLSZ_PHOTO_TEMPLATE = "https://adatbank.mlsz.hu/img/SzemelyFoto/Foto/%d/%d.jpg";
     private Updater updater;
     
     @Override
