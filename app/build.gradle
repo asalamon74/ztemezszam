@@ -16,10 +16,25 @@ android {
         project.ext.set("archivesBaseName", "info.melda.sala.ZeteMezszam" )
     }
 
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            def RELEASE_STORE_PASSWORD=project.properties['RELEASE_STORE_PASSWORD'] ?: ""
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias 'melda'
+            def RELEASE_KEY_PASSWORD=project.properties['RELEASE_KEY_PASSWORD'] ?: ""
+            keyPassword RELEASE_KEY_PASSWORD
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
         }
     }
 }
