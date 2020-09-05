@@ -1,5 +1,5 @@
 plugins {
-    id "de.undercouch.download" version "1.2"
+    id "de.undercouch.download" version "4.1.1"
 }
 
 apply plugin: 'com.android.application'
@@ -37,7 +37,7 @@ task updatePlayerInfo(type: Download) {
             'https://sala.melda.info/mezszam/conf.csv',
             'https://sala.melda.info/mezszam/shirts.csv'
     ])
-    dest 'app/src/main/res/raw/'
+    dest 'src/main/res/raw/'
     onlyIfNewer true
-    quiet true
+    quiet false
 }
