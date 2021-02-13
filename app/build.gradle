@@ -47,6 +47,7 @@ dependencies {
 import de.undercouch.gradle.tasks.download.Download
 
 task updatePlayerInfo(type: Download) {
+    group = "Update"
     src ([
             'https://sala.melda.info/mezszam/seasons.csv',
             'https://sala.melda.info/mezszam/players.csv',
