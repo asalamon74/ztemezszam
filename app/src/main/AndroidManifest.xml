@@ -27,25 +27,32 @@
         android:allowBackup="true"
         android:supportsRtl="false">
         <activity android:name="info.melda.sala.zetemezszam.SeasonActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="info.melda.sala.zetemezszam.PlayerActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:exported="false">
         </activity>
         <activity android:name="info.melda.sala.zetemezszam.PrefsActivity"
-              android:label="@string/titlePrefs" />
+              android:label="@string/titlePrefs"
+              android:exported="false"/>
         <activity android:name="info.melda.sala.zetemezszam.PlayerListActivity"
-              android:label="@string/titlePlayerList" />
+              android:label="@string/titlePlayerList"
+              android:exported="false"/>
         <activity android:name="info.melda.sala.zetemezszam.SeasonListActivity"
-              android:label="@string/titleSeasonList" />
+              android:label="@string/titleSeasonList"
+              android:exported="false"/>
         <activity android:name="info.melda.sala.zetemezszam.ShirtActivity"
-              android:label="@string/app_name" />
+              android:label="@string/app_name"
+              android:exported="false"/>
         <activity android:name="info.melda.sala.zetemezszam.ShirtListActivity"
-              android:label="@string/titleShirtList" />
+              android:label="@string/titleShirtList"
+              android:exported="false"/>
         <service android:name="info.melda.sala.zetemezszam.UpdaterService" />
     </application>
 
