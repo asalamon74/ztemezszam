@@ -5,15 +5,18 @@ plugins {
 apply plugin: 'com.android.application'
 apply plugin: 'de.undercouch.download'
 
+project.ext.versionName = "1.00.09"
+project.ext.packageName = "info.melda.sala.zetemezszam"
+project.archivesBaseName = "${packageName}.ZeteMezszam-${versionName}"
+
 android {
     compileSdkVersion 32
     buildToolsVersion '30.0.2'
 
     defaultConfig {
-        applicationId "info.melda.sala.zetemezszam"
+        applicationId "${packageName}"
         minSdkVersion 14
         targetSdkVersion 32
-        project.ext.set("archivesBaseName", "info.melda.sala.ZeteMezszam" )
     }
 
     signingConfigs {
