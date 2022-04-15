@@ -26,6 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final String UNKNOWN = "????";
     private static final String TAG = "BaseActivity";
     public static final String BUNDLE_KEY_PLAYER_ID = "playerId";
+    private static final float SWIPE_SENSITIVITY = 50;
     SQLiteDatabase db;
     private UpdateReceiver receiver;
     private IntentFilter filter;
@@ -45,26 +46,36 @@ public abstract class BaseActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             Log.d( TAG, "onFling");
             String swipe = "";
-            float sensitvity = 50;
-            if ((e1.getX() - e2.getX()) > sensitvity) {
-                swipe += "Swipe Left\n";
-                swipeLeftAction();
-            } else if ((e2.getX() - e1.getX()) > sensitvity) {
-                swipe += "Swipe Right\n";
-                swipeRightAction();
+            boolean ret = false;
+            float xDiff = e1.getX() - e2.getX();
+            float yDiff = e1.getY() - e2.getY();
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (xDiff > SWIPE_SENSITIVITY) {
+                    swipe += "Swipe Left\n";
+                    swipeLeftAction();
+                    ret = true;
+                } else if (xDiff < -SWIPE_SENSITIVITY) {
+                    swipe += "Swipe Right\n";
+                    swipeRightAction();
+                    ret = true;
+                } else {
+                    swipe += "\n";
+                }
             } else {
-                 swipe += "\n";
+                if (yDiff > SWIPE_SENSITIVITY) {
+                    swipe += "Swipe Up\n";
+                    swipeUpAction();
+                    ret = true;
+                } else if (yDiff < -SWIPE_SENSITIVITY) {
+                    swipe += "Swipe Down\n";
+                    swipeDownAction();
+                    ret = true;
+                } else {
+                    swipe += "\n";
+                }
             }
-/*
-            if ((e1.getY() - e2.getY()) > sensitvity) {
-                swipe += "Swipe Up\n";
-            } else if ((e2.getY() - e1.getY()) > sensitvity) {
-                swipe += "Swipe Down\n";
-            } else {
-                swipe += "\n";
-            }*/
             Log.d( TAG, "swipe: "+swipe);
-            return false;
+            return ret;
         }
 
         @Override
@@ -89,6 +100,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     void swipeLeftAction() {
+    }
+
+    void swipeUpAction() {
+    }
+
+    void swipeDownAction() {
+        updateDatabase();
     }
 
     void longPressAction() {
@@ -133,7 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
-    private void addClickListener(final TextView view, final int position, final String columnName, final String bundleName, final Class activityClass) {
+    private void addClickListener(final TextView view, final int position, final String columnName, final String bundleName, final Class<? extends BaseActivity> activityClass) {
         if( view != null ) {
             view.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -197,8 +215,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, PrefsActivity.class));
                 break;
             case R.id.itemManualSync:
-                Toast.makeText( this, "Adatbázis frissítése", Toast.LENGTH_SHORT).show();
-                startService(new Intent(this, UpdaterService.class));
+                updateDatabase();
                 break;
             case R.id.itemPlayerList:
                 startActivity(new Intent(this, PlayerListActivity.class));
@@ -215,6 +232,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    private void updateDatabase() {
+        Toast.makeText( this, "Adatbázis frissítése", Toast.LENGTH_SHORT).show();
+        startService(new Intent(this, UpdaterService.class));
+    }
+
     protected abstract Cursor getCursor();
 
     class UpdateReceiver extends BroadcastReceiver {
@@ -222,7 +244,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("UpdateReceiver", "onReceived");
-            Integer result = (Integer)intent.getExtras().get("result");
+            Integer result = UpdaterService.UPDATER_FAIL;
+            if (intent.getExtras() != null) {
+                result = (Integer) intent.getExtras().get("result");
+            }
             if( result == null ) {
                 result = UpdaterService.UPDATER_FAIL;
             }
