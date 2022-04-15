@@ -78,13 +78,11 @@ public class UpdaterService extends Service {
         static final String RECEIVE_ZTEDB_NOTIFICATION = "info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION";
 
         private final WeakReference<UpdaterService> updaterServiceReference;
-        private final DbHelper dbHelper;
         private final SQLiteDatabase db;
-        private Intent intent;
 
         Updater(UpdaterService updaterService) {
             this.updaterServiceReference = new WeakReference<>(updaterService);
-            dbHelper = new DbHelper(updaterService);
+            DbHelper dbHelper = new DbHelper(updaterService);
             db = dbHelper.getWritableDatabase();
         }
 
@@ -174,7 +172,7 @@ public class UpdaterService extends Service {
                     writePlayerPhotoIntoDB(db, playerMlszPhotoId, imageJpeg);
                 } catch (IOException e) {
                     // missing photo, not a big problem
-                    Log.v(TAG, e.getMessage());
+                    Log.v(TAG, "Unable to download photo", e);
                 }
             }
         }
@@ -215,7 +213,7 @@ public class UpdaterService extends Service {
         // Called once the background activity has completed
         @Override
         protected void onPostExecute(Integer result) {
-            intent = new Intent( DB_UPDATED_INTENT );
+            Intent intent = new Intent( DB_UPDATED_INTENT );
             Bundle b = new Bundle();
             b.putInt("result", result);
             intent.putExtras(b);

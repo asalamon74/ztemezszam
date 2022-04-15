@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,7 +156,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle state) {
+    protected void onSaveInstanceState(@NonNull Bundle state) {
         Log.d(TAG, "onSaveInstanceState "+playerId);
         super.onSaveInstanceState(state);
         state.putInt(BUNDLE_KEY_PLAYER_ID, playerId);
