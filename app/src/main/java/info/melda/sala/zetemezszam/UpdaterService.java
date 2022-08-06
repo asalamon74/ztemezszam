@@ -38,7 +38,8 @@ public class UpdaterService extends Service {
 
     public static final String DB_UPDATED_INTENT = "info.melda.sala.DB_UPDATED";
     private static final String URL_PLAYERINFO = "https://sala.melda.info/mezszam/";
-    private static final String URL_MLSZ_PHOTO_TEMPLATE = "https://adatbank.mlsz.hu/img/SzemelyFoto/Foto/%d/%d.jpg";
+    private static final String URL_MLSZ_PHOTO_TEMPLATE = "https://adatbank.mlsz.hu/img/SzemelyFoto/Foto/%d/%d.%s";
+    private static final String[] PHOTO_EXTENSIONS = {"jpg", "png"};
     private Updater updater;
     
     @Override
@@ -163,17 +164,28 @@ public class UpdaterService extends Service {
             List<Integer> playersWithMissingPhotos = getPlayersWithMissingPhoto(db);
             for (Integer playerMlszPhotoId : playersWithMissingPhotos) {
                 Log.v(TAG, "Updating photo for "+playerMlszPhotoId);
-                String url = photoURL(playerMlszPhotoId);
-                Log.v(TAG, "url:"+url);
-                try {
-                    InputStream is = readURLStream(url);
-                    byte[] imageJpeg = readBytes(is);
-                    Log.v(TAG, "Downloaded image size:"+imageJpeg.length);
-                    writePlayerPhotoIntoDB(db, playerMlszPhotoId, imageJpeg);
-                } catch (IOException e) {
-                    // missing photo, not a big problem
-                    Log.v(TAG, "Unable to download photo", e);
+                String[] urls = photoURLs(playerMlszPhotoId);
+                for (String url : urls) {
+                    Log.v(TAG, "url:"+url);
+                    byte[] imageJpeg = getImage(url);
+                    if (imageJpeg != null) {
+                        writePlayerPhotoIntoDB(db, playerMlszPhotoId, imageJpeg);
+                        break;
+                    }
                 }
+            }
+        }
+
+        private byte[] getImage(String url) {
+            try {
+                InputStream is = readURLStream(url);
+                byte[] imageJpeg = readBytes(is);
+                Log.v(TAG, "Downloaded image size:"+imageJpeg.length);
+                return imageJpeg;
+            } catch (IOException e) {
+                // missing photo, not a big problem
+                Log.v(TAG, "Unable to download photo", e);
+                return null;
             }
         }
 
@@ -205,9 +217,14 @@ public class UpdaterService extends Service {
         }
 
         @SuppressLint("DefaultLocale")
-        private String photoURL(int playerId) {
+        private String[] photoURLs(int playerId) {
             int playerDir = (int)Math.ceil(0.001 * playerId);
-            return String.format(URL_MLSZ_PHOTO_TEMPLATE, playerDir, playerId);
+            String[] urls = new String[PHOTO_EXTENSIONS.length];
+            int urlIndex = 0;
+            for (String extension : PHOTO_EXTENSIONS) {
+                urls[urlIndex++] = String.format(URL_MLSZ_PHOTO_TEMPLATE, playerDir, playerId, extension);
+            }
+            return urls;
         }
 
         // Called once the background activity has completed
