@@ -10,13 +10,13 @@ project.ext.packageName = "info.melda.sala.zetemezszam"
 project.archivesBaseName = "${packageName}.ZeteMezszam-${versionName}"
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion '30.0.2'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "${packageName}"
         minSdkVersion 14
-        targetSdkVersion 32
+        targetSdkVersion 29
     }
 
     signingConfigs {
