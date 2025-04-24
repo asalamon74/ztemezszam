@@ -10,6 +10,7 @@ project.ext.packageName = "info.melda.sala.zetemezszam"
 project.archivesBaseName = "${packageName}.ZeteMezszam-${versionName}"
 
 android {
+    namespace "info.melda.sala.zetemezszam"
     compileSdkVersion 34
 //    buildToolsVersion '34.0.0'
 
