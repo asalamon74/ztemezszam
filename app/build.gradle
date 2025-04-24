@@ -5,18 +5,18 @@ plugins {
 apply plugin: 'com.android.application'
 apply plugin: 'de.undercouch.download'
 
-project.ext.versionName = "1.00.09"
+project.ext.versionName = "1.00.10"
 project.ext.packageName = "info.melda.sala.zetemezszam"
 project.archivesBaseName = "${packageName}.ZeteMezszam-${versionName}"
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion 34
+//    buildToolsVersion '34.0.0'
 
     defaultConfig {
         applicationId "${packageName}"
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 34
     }
 
     signingConfigs {
@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.appcompat:appcompat:1.6.1'
 }
 
 task updatePlayerInfo(type: Download) {

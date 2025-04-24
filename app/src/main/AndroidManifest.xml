@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="info.melda.sala.zetemezszam"
-      android:versionCode="10009"
-      android:versionName="1.00.09"
+      android:versionCode="10010"
+      android:versionName="1.00.10"
       android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,13 +12,13 @@
     <permission android:name="info.melda.sala.SEND_ZTEDB_UPDATED_NOTIFICATION"
         android:label="@string/send_ztedb_updated_notifications_permission_label"
         android:description="@string/send_ztedb_updated_notifications_permission_description"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:permissionGroup="android.permission-group.ACTIVITY_RECOGNITION"
         android:protectionLevel="normal" />
 
     <permission android:name="info.melda.sala.RECEIVE_ZTEDB_UPDATED_NOTIFICATION"
         android:label="@string/receive_ztedb_updated_notifications_permission_label"
         android:description="@string/receive_ztedb_updated_notifications_permission_description"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:permissionGroup="android.permission-group.ACTIVITY_RECOGNITION"
         android:protectionLevel="normal" />
     <application
         android:theme="@style/Theme.AppCompat"
@@ -25,8 +26,10 @@
         android:icon="@drawable/zteicon"
         android:name="info.melda.sala.zetemezszam.ZTEMezszamApplication"
         android:allowBackup="true"
-        android:supportsRtl="false">
+        android:supportsRtl="false"
+        android:extractNativeLibs="true">
         <activity android:name="info.melda.sala.zetemezszam.SeasonActivity"
+                  android:exported="true"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,18 +37,24 @@
             </intent-filter>
         </activity>
         <activity android:name="info.melda.sala.zetemezszam.PlayerActivity"
-                  android:label="@string/app_name">
+            android:exported="false"
+            android:label="@string/app_name">
         </activity>
         <activity android:name="info.melda.sala.zetemezszam.PrefsActivity"
-              android:label="@string/titlePrefs"/>
+            android:exported="false"
+            android:label="@string/titlePrefs"/>
         <activity android:name="info.melda.sala.zetemezszam.PlayerListActivity"
-              android:label="@string/titlePlayerList"/>
+            android:exported="false"
+            android:label="@string/titlePlayerList"/>
         <activity android:name="info.melda.sala.zetemezszam.SeasonListActivity"
-              android:label="@string/titleSeasonList"/>
+            android:exported="false"
+            android:label="@string/titleSeasonList"/>
         <activity android:name="info.melda.sala.zetemezszam.ShirtActivity"
-              android:label="@string/app_name"/>
+            android:exported="false"
+            android:label="@string/app_name"/>
         <activity android:name="info.melda.sala.zetemezszam.ShirtListActivity"
-              android:label="@string/titleShirtList"/>
+            android:exported="false"
+            android:label="@string/titleShirtList"/>
         <service android:name="info.melda.sala.zetemezszam.UpdaterService" />
     </application>
 
