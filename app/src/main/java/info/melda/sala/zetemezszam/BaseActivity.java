@@ -210,24 +210,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.itemPrefs:
-                startActivity(new Intent(this, PrefsActivity.class));
-                break;
-            case R.id.itemManualSync:
-                updateDatabase();
-                break;
-            case R.id.itemPlayerList:
-                startActivity(new Intent(this, PlayerListActivity.class));
-                break;
-            case R.id.itemSeasonList:
-                startActivity(new Intent(this, SeasonListActivity.class));
-                break;
-            case R.id.itemShirtList:
-                startActivity(new Intent(this, ShirtListActivity.class));
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if( itemId == R.id.itemPrefs ) {
+            startActivity(new Intent(this, PrefsActivity.class));
+        } else if (itemId == R.id.itemManualSync) {
+            updateDatabase();
+        } else if (itemId == R.id.itemPlayerList) {
+            startActivity(new Intent(this, PlayerListActivity.class));
+        } else if (itemId == R.id.itemSeasonList) {
+            startActivity(new Intent(this, SeasonListActivity.class));
+        } else if (itemId == R.id.itemShirtList) {
+            startActivity(new Intent(this, ShirtListActivity.class));
+        } else {
+            return super.onOptionsItemSelected(item);
         }
         return true;
     }

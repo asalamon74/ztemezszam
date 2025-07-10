@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-      android:versionCode="10010"
-      android:versionName="1.00.10"
+      android:versionCode="10011"
+      android:versionName="1.00.11"
       android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,8 +25,7 @@
         android:icon="@drawable/zteicon"
         android:name="info.melda.sala.zetemezszam.ZTEMezszamApplication"
         android:allowBackup="true"
-        android:supportsRtl="false"
-        android:extractNativeLibs="true">
+        android:supportsRtl="false">
         <activity android:name="info.melda.sala.zetemezszam.SeasonActivity"
                   android:exported="true"
                   android:label="@string/app_name">
