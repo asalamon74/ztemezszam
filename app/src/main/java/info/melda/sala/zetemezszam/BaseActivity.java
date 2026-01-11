@@ -21,6 +21,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected static final String UNKNOWN = "????";
@@ -190,7 +191,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
         Log.d( TAG, "list:"+list);
         list.setAdapter(adapter);
-        registerReceiver(receiver, filter, SEND_ZTEDB_NOTIFICATION, null );
+        ContextCompat.registerReceiver(
+                this,
+                receiver,
+                filter,
+                SEND_ZTEDB_NOTIFICATION,
+                null,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+        );
     }
 
     @Override
