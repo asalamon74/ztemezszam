@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [21, 29, 33, 35]
+        api-level: [21, 29, 33, 35, 36]
         target: [default]
         arch: [x86_64]
       fail-fast: false
