@@ -76,7 +76,7 @@ jobs:
           echo "Checking app info..."
           adb shell dumpsys package info.melda.sala.zetemezszam | head -20 || echo "Could not get package info"
           echo "Running instrumentation tests..."
-          if ./gradlew connectedAndroidTest 2>&1 || ./gradlew connectedCheck 2>&1; then
+          if ./gradlew connectedAndroidTest 2>&1; then
             echo "Instrumentation tests passed successfully"
           else
             echo "ERROR: Instrumentation tests failed"
