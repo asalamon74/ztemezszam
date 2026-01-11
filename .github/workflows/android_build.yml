@@ -76,7 +76,9 @@ jobs:
           echo "Checking app info..."
           adb shell dumpsys package info.melda.sala.zetemezszam | head -20 || echo "Could not get package info"
           echo "Running instrumentation tests..."
-          ./gradlew connectedAndroidTest || ./gradlew connectedCheck || echo "No instrumentation tests found, verifying app launch instead"
-          echo "Launching app to verify it starts correctly..."
-          adb shell am start -n info.melda.sala.zetemezszam/.SeasonActivity
-          sleep 2
+          if ./gradlew connectedAndroidTest 2>&1 || ./gradlew connectedCheck 2>&1; then
+            echo "Instrumentation tests passed successfully"
+          else
+            echo "ERROR: Instrumentation tests failed"
+            exit 1
+          fi
