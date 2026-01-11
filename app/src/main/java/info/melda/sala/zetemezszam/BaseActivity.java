@@ -22,6 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected static final String UNKNOWN = "????";
@@ -113,16 +116,38 @@ public abstract class BaseActivity extends AppCompatActivity {
     void longPressAction() {
     }
 
+    private void setupWindowInsetsHandling(View rootView) {
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            int actionBarHeight = 0;
+            android.util.TypedValue tv = new android.util.TypedValue();
+            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+                actionBarHeight = android.util.TypedValue.complexToDimensionPixelSize(
+                        tv.data, getResources().getDisplayMetrics());
+            }
+
+            int topPadding = insets.top + actionBarHeight;
+            v.setPadding(insets.left, topPadding, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
+    }
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(getLayoutId());
+
         if( getSupportActionBar() != null ) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setLogo(R.drawable.zteicon);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setTitle(" "+getResources().getString(R.string.app_name));
         }
+
+        View rootView = findViewById(android.R.id.content);
+        setupWindowInsetsHandling(rootView);
+
         Log.d( TAG, "onCreate");
         Log.d( TAG, "id:"+getListId());
         list = findViewById( getListId() );
