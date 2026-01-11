@@ -66,10 +66,15 @@ jobs:
         script: |
           echo "Building and installing app..."
           ./gradlew assembleDebug
-          ./gradlew installDebug
           echo "Waiting for emulator to be ready..."
           adb wait-for-device
           adb shell input keyevent 82 || true
+          echo "Installing app..."
+          ./gradlew installDebug || (echo "Gradle installDebug failed, trying manual install..." && adb install -r app/build/outputs/apk/debug/*.apk)
+          echo "Verifying app is installed..."
+          adb shell pm list packages | grep info.melda.sala.zetemezszam || (echo "App installation failed! Listing all packages..." && adb shell pm list packages && exit 1)
+          echo "Checking app info..."
+          adb shell dumpsys package info.melda.sala.zetemezszam | head -20 || echo "Could not get package info"
           echo "Running instrumentation tests..."
           ./gradlew connectedAndroidTest || ./gradlew connectedCheck || echo "No instrumentation tests found, verifying app launch instead"
           echo "Launching app to verify it starts correctly..."
