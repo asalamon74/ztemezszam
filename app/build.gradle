@@ -9,6 +9,13 @@ project.ext.versionName = "1.00.11"
 project.ext.packageName = "info.melda.sala.zetemezszam"
 project.archivesBaseName = "${packageName}.ZeteMezszam-${versionName}"
 
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+}
+
 android {
     namespace "info.melda.sala.zetemezszam"
     compileSdkVersion 35
