@@ -230,12 +230,16 @@ public class UpdaterService extends Service {
         // Called once the background activity has completed
         @Override
         protected void onPostExecute(Integer result) {
-            Intent intent = new Intent( DB_UPDATED_INTENT );
-            Bundle b = new Bundle();
-            b.putInt("result", result);
-            intent.putExtras(b);
             UpdaterService updaterService = updaterServiceReference.get();
-            updaterService.sendBroadcast(intent, RECEIVE_ZTEDB_NOTIFICATION);
+
+            if (updaterService != null) {
+                Intent intent = new Intent(DB_UPDATED_INTENT);
+                intent.setPackage(updaterService.getPackageName());
+                Bundle b = new Bundle();
+                b.putInt("result", result);
+                intent.putExtras(b);
+                updaterService.sendBroadcast(intent, RECEIVE_ZTEDB_NOTIFICATION);
+            }
         }
     }
 }
